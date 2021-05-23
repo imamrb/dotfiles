@@ -1,0 +1,38 @@
+# Process IDs occupying port 3000
+alias tcp='lsof -wni tcp:3000'
+
+# GNU
+
+alias ls='exa --icons'
+# alias cat='batcat'
+alias preview="fzf --preview 'batcat --color \"always\" {}'"
+alias up='sudo apt update -y && sudo apt upgrade -y'
+
+
+# POSTGRES
+
+alias pgstart='sudo service postgresql start'
+alias pgstatus='sudo service postgresql status'
+alias pgstop='sudo service postgresql stop'
+
+
+# RAILS
+
+# Check if the file exist, check if the process exist with the PID, then kill
+alias killr='PID=tmp/pids/server.pid && test -f $PID && ps -p $(cat $PID) > /dev/null && kill -9 $(cat $PID)'
+alias rdsr='rails db:seed:replant'
+alias rdmd='RAILS_ENV=development rails db:migrate'
+alias rdmd='RAILS_ENV=test rails db:migrate'
+alias rdcms='RAILS_ENV=development rake db:drop db:create db:migrate db:seed'
+
+
+# GIT
+
+alias gplog='git log --graph --color --decorate --oneline'
+alias gitskip='git update-index --skip-worktree'
+alias gitnoskip='git update-index --no-skip-worktree'
+alias gitpc='git config --local user.email imam.swe@gmail.com; git config --local user.name "Imam Hossain";'
+alias gitwc='git config --global user.email imam.hossain@welldev.io; git config --global user.name "Imam Hossain";'
+alias ggrep='git grep -n'
+# git search and replace, original_text = $1, replace_text=$2
+alias gsed="git grep -l \$1 | xargs sed -i 's/\$1/\$2/g"

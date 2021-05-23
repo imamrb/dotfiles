@@ -87,6 +87,7 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 # plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
+source $HOME/.zsh_aliases
 
 # User configuration
 
@@ -113,7 +114,6 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias dotfiles="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
 # Desktop is the starting path
 if [[ $PWD == $(realpath ~) ]]; then
