@@ -1,3 +1,6 @@
+# .dotfiles bare git 
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+
 # Process IDs occupying port 3000
 alias tcp='lsof -wni tcp:3000'
 

@@ -182,6 +182,9 @@ sudo mdutil -E / > /dev/null
 defaults write com.apple.Safari UniversalSearchEnabled -bool false
 defaults write com.apple.Safari SuppressSearchSuggestions -bool true
 
+# Disable .DS_Store file creation
+defaults write com.apple.desktopservices DSDontWriteNetworkStores true
+
 ###############################################################################
 # Kill affected applications                                                  #
 ###############################################################################
