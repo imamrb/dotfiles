@@ -17,9 +17,23 @@
 
    `dotfiles config --local status.showUntrackedFiles no`
 
-5. Checkout the actual content from your .dotfiles repository to $HOME
+5. Set the flag showUntrackedFiles to no on this specific (local) repository
+   
+   `config config --local status.showUntrackedFiles no`
+
+6. Checkout the actual content from your .dotfiles repository to $HOME
    
    `dotfiles checkout`
+
+If there is a conflict on checkout, move the existing files to `.dotfiles-backup` folder and replace them with newer ones.
+
+  ```
+   mkdir -p .dotfiles-backup && \
+   dotfiles checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | \
+   xargs -I{} mv {} .dotfiles-backup/{}
+
+  ```
+Then run `dotfiles checkout` again
 
 For Details Explanation and workthrough managing dotfiles using git bare repository, checkout this blogs
 
