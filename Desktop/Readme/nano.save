@@ -1,0 +1,6 @@
+[{"message"=>
+   "Variable $input of type AdjustLeaveBalanceInput! was provided invalid value for leaveBalance (Field is not defined on AdjustLeaveBalanceInput)",
+  "locations"=>[{"line"=>1, "column"=>35}],
+  "extensions"=>
+   {"value"=>{"ids"=>[1772], "leaveBalance"=>1.5},
+    "problems"=>[{"path"=>["leaveBalance"], "explanation"=>"Field is not defined on AdjustLeaveBalanceInput"}]}}]
