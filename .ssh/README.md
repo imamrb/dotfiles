@@ -8,8 +8,8 @@ Create Different Private and Public Key
 Create two different ssh key with work account and personal account email
 
 ```bash
-    $ ssh-keygen -t rsc -C "imam.hossain@welldev.io" -P '' -f 'id_rsa' # Work account
-	$ ssh-keygen -t rsa -C "imam.swe@gmail.com" -P '' -f 'id_rsa_personal'
+    ssh-keygen -t rsc -C "imam.hossain@welldev.io" -P '' -f 'id_rsa' # Work account
+	ssh-keygen -t rsa -C "imam.swe@gmail.com" -P '' -f 'id_rsa_personal'
 ```
 2 keys created at:
 
