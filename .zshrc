@@ -16,14 +16,8 @@ POWERLEVEL9K_INSTANT_PROMPT=quiet
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Export mysql path
-export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
-
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/imam/.oh-my-zsh"
-export EDITOR=nano
-export VISUAL="$EDITOR"
-export HOMEBREW_NO_AUTO_UPDATE=1
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,

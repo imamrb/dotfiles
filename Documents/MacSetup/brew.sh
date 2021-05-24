@@ -94,6 +94,8 @@ brew install xpdf
 brew install exa
 brew install fzf
 brew tap homebrew/autoupdate
+# Update Homebrew automatically once in a day
+brew autoupdate start 86400
 
 # Remove outdated versions from the cellar.
 brew cleanup
