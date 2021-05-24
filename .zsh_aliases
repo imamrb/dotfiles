@@ -1,5 +1,9 @@
 # .dotfiles bare git 
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias dat='dotfiles add -u' # Stage all updates of tracked files
+alias dc='dotfiles commit -m '
+alias dp='dotfiles push'
+alias ds='dotfiles status'
 
 # Process IDs occupying port 3000
 alias tcp='lsof -wni tcp:3000'
