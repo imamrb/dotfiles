@@ -1,15 +1,22 @@
+# Set starting path
+if [[ $PWD == $(realpath ~) ]]; then
+    cd $PWD/Projects
+fi
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+
 # supress console output during initialization 
 POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+# Export mysql path
 export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
 
 # Path to your oh-my-zsh installation.
@@ -89,37 +96,6 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 source $ZSH/oh-my-zsh.sh
 source $HOME/.zsh_aliases
 
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-# Desktop is the starting path
-if [[ $PWD == $(realpath ~) ]]; then
-    cd ~/Desktop/
-fi
-
 # only show full path when its a git directory powerlevel10k
 function zsh_directory_name() {
   emulate -L zsh
@@ -134,7 +110,6 @@ function zsh_directory_name() {
   return 1
 }
 
-
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
     print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
@@ -148,6 +123,24 @@ source "$HOME/.zinit/bin/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
+# - - - - - - - - - - - - - - - - - - - -
+# Theme
+# - - - - - - - - - - - - - - - - - - - -
+
+# Most Themes Use This Option.
+setopt promptsubst
+
+# These plugins provide many aliases - atload''
+zinit wait lucid for \
+        OMZ::lib/git.zsh \
+    atload"unalias grv" \
+        OMZ::plugins/git/git.plugin.zsh
+
+# Provide A Simple Prompt Till The Theme Loads
+# PS1="READY >"
+# zinit ice wait'!' lucid
+zinit ice depth=1; zinit light romkatv/powerlevel10k
+
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
 zinit light-mode for \
@@ -158,24 +151,55 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
-### Zinit's Plugins
-zinit ice blockf; 
+### Begin zinits Plugins
 
-zinit light zsh-users/zsh-completions
-zinit light zsh-users/zsh-history-substring-search
-zinit light zsh-users/zsh-syntax-highlighting
-
-zinit ice as"program" pick"$ZPFX/bin/git-*" make"PREFIX=$ZPFX"
-
-zinit ice wait lucid atload'_zsh_autosuggest_start'
-zinit light zsh-users/zsh-autosuggestions
-
-zinit snippet OMZ::plugins/git/git.plugin.zsh
+# OMZ Plugins Load first
 zinit snippet OMZ::plugins/rails/rails.plugin.zsh
 zinit snippet OMZ::plugins/jira/jira.plugin.zsh
-zinit light agkozak/zsh-z
 
-zinit ice depth=1; zinit light romkatv/powerlevel10k
+### needs: zinit, fzf
+
+# z
+zinit ice wait blockf lucid
+zinit light rupa/z
+
+# z tab completion
+zinit ice wait lucid
+zinit light changyuheng/fz
+
+# z / fzf (ctrl-g)
+zinit ice wait lucid
+zinit light andrewferrier/fzf-z
+
+# cd
+zinit ice wait lucid
+zinit light changyuheng/zsh-interactive-cd
+
+# Don't bind these keys until ready
+bindkey -r '^[[A'
+bindkey -r '^[[B'
+function __bind_history_keys() {
+  bindkey '^[[A' history-substring-search-up
+  bindkey '^[[B' history-substring-search-down
+}
+# History substring searching
+zinit ice wait lucid atload'__bind_history_keys'
+zinit light zsh-users/zsh-history-substring-search
+
+# autosuggestions, trigger precmd hook upon load
+zinit ice wait lucid atload'_zsh_autosuggest_start'
+zinit light zsh-users/zsh-autosuggestions
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=10
+
+# Tab completions
+zinit ice wait lucid blockf atpull'zinit creinstall -q .'
+zinit light zsh-users/zsh-completions
+
+# Syntax highlighting
+zinit ice wait lucid atinit'zpcompinit; zpcdreplay'
+zinit light zdharma/fast-syntax-highlighting
+
+##### END Zinit stuff #####
 
 # https://gist.github.com/ctechols/ca1035271ad134841284  ################
 autoload -Uz compinit
@@ -198,5 +222,3 @@ eval "$(rbenv init -)"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
