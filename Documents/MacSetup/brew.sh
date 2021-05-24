@@ -92,6 +92,7 @@ brew install font-inconsolata
 # Other Tools
 brew install xpdf
 brew install exa
+brew install fzf
 brew tap homebrew/autoupdate
 
 # Remove outdated versions from the cellar.
