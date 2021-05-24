@@ -82,15 +82,30 @@ ssh -T git@github.com-personal
 Clone Repo and Modify Git config
 --------------------------------------------
 
+Clone with work account
+
 ```bash
 	git clone git@github.com-personal:Santho07/<repo_name>
 	
-	#cd <repo_name> and modify git config
+	# cd <repo_name> and modify git config
+	
+	git config --local user.name 'Imam Hossain'
+	git config --local user.email 'imam.hossain@welldev.io'
+ 
+```
+
+Clone with personal account
+
+```bash
+	git clone git@github.com-personal:Santho07/<repo_name>
+	
+	# cd <repo_name> and modify git config
 	
 	git config --local user.name 'Imam Hossain'
 	git config --local user.email 'imam.swe@gmail.com'
  
 ```
+
 Or, set global git config
 
 ```bash
@@ -101,7 +116,7 @@ Or, set global git config
 Then use normal flow to push code
 
 ```bash
-	$ git add .
-	$ git commit -m ":tada: Initial Commit"
-	$ git push
+	git add .
+	git commit -m ":tada: Initial Commit"
+	git push
 ```
