@@ -16,13 +16,6 @@ alias preview="fzf --preview 'batcat --color \"always\" {}'"
 alias up='sudo apt update -y && sudo apt upgrade -y'
 
 
-# POSTGRES
-
-alias pgstart='sudo service postgresql start'
-alias pgstatus='sudo service postgresql status'
-alias pgstop='sudo service postgresql stop'
-
-
 # RAILS
 
 # Check if the file exist, check if the process exist with the PID, then kill
@@ -43,3 +36,24 @@ alias gitwc='git config --global user.email imam.hossain@welldev.io; git config 
 alias ggrep='git grep -n'
 # git search and replace, original_text = $1, replace_text=$2
 alias gsed="git grep -l \$1 | xargs sed -i 's/\$1/\$2/g"
+
+
+# POSTGRES
+
+alias pgstart='brew services start postgresql'
+alias pgstatus='brew services list'
+alias pgstop='brew services stop postgresql'
+
+
+# MySQL
+
+alias mqstart='brew services start mysql@5.7'
+alias mqstatus='brew services list'
+alias mqstop='brew services stop mysql@5.7'
+alias mysql='mysql -u root' # mysql root user without password
+
+# Redis
+
+alias rdstart='brew services start redis'
+alias rdstatus='brew services list'
+alias rdstop='brew services stop redis'
