@@ -75,7 +75,10 @@ Test
 ```bash
 
 ssh -T git@github.com
+# Response: Hi him-wtag! You've successfully authenticated, but GitHub does not provide shell access.
+
 ssh -T git@github.com-personal
+# Response: Hi Santho07! You've successfully authenticated, but GitHub does not provide shell access.
 
 ```
 
