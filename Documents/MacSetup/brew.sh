@@ -93,9 +93,9 @@ brew install font-inconsolata
 brew install xpdf
 brew install exa
 brew install fzf
+brew install glow # Render markdown in cli, example: glow README.md
 brew tap homebrew/autoupdate
-# Update Homebrew automatically once in a day
-brew autoupdate start 86400
+brew autoupdate start 86400 # Update Homebrew automatically once in a day
 
 # Remove outdated versions from the cellar.
 brew cleanup
