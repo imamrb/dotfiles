@@ -1,3 +1,7 @@
+# Profiling 
+# run zprof from terminal
+# zmodload zsh/zprof
+
 # Set starting path
 if [[ $PWD == $(realpath ~) ]]; then
     cd $PWD/Projects
@@ -45,7 +49,7 @@ export ZSH="/Users/imam/.oh-my-zsh"
 # DISABLE_UPDATE_PROMPT="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+export UPDATE_ZSH_DAYS=13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
 # DISABLE_MAGIC_FUNCTIONS="true"
@@ -88,21 +92,8 @@ export ZSH="/Users/imam/.oh-my-zsh"
 # plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
-source $HOME/.zsh_aliases
-
-# only show full path when its a git directory powerlevel10k
-function zsh_directory_name() {
-  emulate -L zsh
-  [[ $1 == d ]] || return
-  while [[ $2 != / ]]; do
-    if [[ -e $2/.git ]]; then
-      typeset -ga reply=(${2:t} $#2)
-      return
-    fi
-    2=${2:h}
-  done
-  return 1
-}
+source ~/.zsh_aliases
+source ~/.zsh_functions
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
@@ -193,6 +184,12 @@ zinit light zsh-users/zsh-completions
 zinit ice wait lucid atinit'zpcompinit; zpcdreplay'
 zinit light zdharma/fast-syntax-highlighting
 
+# # Lazy load NVM
+zinit ice wait lucid
+export NVM_COMPLETION=true
+export NVM_LAZY_LOAD=true
+zinit light lukechilds/zsh-nvm
+
 ##### END Zinit stuff #####
 
 # https://gist.github.com/ctechols/ca1035271ad134841284  ################
@@ -203,16 +200,7 @@ else
 	compinit -C;
 fi;
 
-JIRA_URL='https://welltravel.atlassian.net/'
-JIRA_NAME='imam.hossain'
-JIRA_PROJECT_KEY='LMS'
-JIRA_DEFAULT_ACTION='rapidboard'
-
-# Node Version Manager
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-eval "$(rbenv init -)"
+eval "$(rbenv init - --no-rehash)"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
