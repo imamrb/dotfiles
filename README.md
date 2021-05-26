@@ -1,9 +1,28 @@
-# @Imam Dotfiles
+# My Dotfiles
 
 Yet another dotfiles repository customized for my needs.
 
+I have followed [bare git](https://www.saintsjd.com/2011/01/what-is-a-bare-git-repository/) strategy to backup my dotfiles. 
+Learn more about it in this blog post: [The best way to store your dotfiles: A bare Git repository](https://www.atlassian.com/git/tutorials/dotfiles) 
 
-This is a git bare repository. To install on a new machine, the steps are as follows...
+Feel free to take the bits and use of your own.
+
+## Prequisite
+
+
+```bash
+# 1. Install oh_my_zsh
+   
+   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+# 2. Install zinit
+
+   sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
+
+# 3. Install fzf
+   brew install fzf
+   
+```
 
 ## Installing on a new machine
 
@@ -24,27 +43,20 @@ This is a git bare repository. To install on a new machine, the steps are as fol
 
    dotfiles config --local status.showUntrackedFiles no
 
-# 5. Set the flag showUntrackedFiles to no on this specific (local) repository
-   
-   config config --local status.showUntrackedFiles no
-
-
-# 6. Backup the existing files to `.dotfiles-backup` folder and replace them with newer ones.
+# 5. Backup the existing files to `.dotfiles-backup` folder and replace them with newer ones.
 
    mkdir -p .dotfiles-backup && \
    dotfiles checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | \
    xargs -I{} mv {} .dotfiles-backup/{}
 
-# 7. Checkout the actual content from your .dotfiles repository to $HOME
+# 6. Checkout the actual content from your .dotfiles repository to $HOME
    
    dotfiles checkout
 
 ```
 
-For Details Explanation and workthrough managing dotfiles using git bare repository, checkout this blogs
+For Details Explanation of these commands, checkout this blog [here](https://www.ackama.com/blog/posts/the-best-way-to-store-your-dotfiles-a-bare-git-repository-explained).
 
-- https://www.ackama.com/blog/posts/the-best-way-to-store-your-dotfiles-a-bare-git-repository-explained
-- https://www.atlassian.com/git/tutorials/dotfiles
 
 ## Thanks to
 
