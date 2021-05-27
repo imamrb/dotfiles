@@ -17,3 +17,13 @@ Run them in order..
      ./osx.sh
      ./brew.sh
    ```
+
+## Other Apps
+
+- To set Sublime Text as Default Text Editor
+
+https://github.com/Lord-Kamina/SwiftDefaultApps
+
+- Tiles for window management
+
+https://freemacsoft.net/tiles/
