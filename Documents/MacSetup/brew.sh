@@ -52,6 +52,8 @@ source ~/.zshrc
 # Apps
 brew install google-chrome
 brew install slack
+brew install flux
+brew install stats # system monitor in your menu bar
 
 # Development tools
 brew install visual-studio-code
