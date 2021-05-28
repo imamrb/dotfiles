@@ -1,8 +1,4 @@
-# Profiling 
-# run zprof from terminal
-# zmodload zsh/zprof
-
-# Set starting path
+# Set starting directory
 if [[ $PWD == $(realpath ~) ]]; then
     cd $PWD/Projects
 fi
@@ -24,76 +20,35 @@ fi
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-# supress console output during initialization 
-POWERLEVEL9K_INSTANT_PROMPT=quiet
+POWERLEVEL9K_INSTANT_PROMPT=quiet      # Supress console output during initialization 
+UPDATE_ZSH_DAYS=15                     # Auto-update oh-my-zsh (in days).
 
-# auto-update oh-my-zsh (in days).
-UPDATE_ZSH_DAYS=15
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# Caution: this setting can cause issues with multiline prompts (zsh 5.7.1 and newer seem to work)
-# See https://github.com/ohmyzsh/ohmyzsh/issues/5765
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-HIST_STAMPS="mm/dd/yyyy"
+# This makes repository status check for large repositories much, much faster.
+DISABLE_UNTRACKED_FILES_DIRTY="true"   # Disable marking untracked files under VCS as dirty.
 
 
 # History environment variables
 HISTFILE=${HOME}/.zsh_history
-HISTSIZE=50000                # Maximum number of history entries to keep alive in one session
-SAVEHIST=10000                # Maximum number of history entries to keep.
+HISTSIZE=50000                         # Maximum number of history entries to keep alive in one session
+SAVEHIST=10000                         # Maximum number of history entries to keep.
+HIST_STAMPS="mm/dd/yyyy"               # Set one of the following "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 
+setopt HIST_EXPIRE_DUPS_FIRST          # Expire duplicates first
+setopt HIST_IGNORE_DUPS                # Do not enter 2 consecutive duplicates into history
+setopt HIST_IGNORE_SPACE               # Ignore command lines with leading spaces
+setopt HIST_REDUCE_BLANKS              # Ignore unecessary whitespace
+setopt HIST_VERIFY                     # Reload results of history expansion before executing
+setopt HIST_NO_STORE                   # Don't store calls to `history` or `fc`
+setopt SHARE_HISTORY                   # Constantly share history between shell instances
+setopt EXTENDED_HISTORY                # Save time stamps and durations
+setopt INC_APPEND_HISTORY              # Constantly update $HISTFILE
+setopt NO_HIST_BEEP                    # Disable that awful beep when you hit the edges of the history
 
-setopt HIST_EXPIRE_DUPS_FIRST # Expire duplicates first
-setopt HIST_IGNORE_DUPS       # Do not enter 2 consecutive duplicates into history
-setopt HIST_IGNORE_SPACE      # Ignore command lines with leading spaces
-setopt HIST_REDUCE_BLANKS     # Ignore unecessary whitespace
-setopt HIST_VERIFY            # Reload results of history expansion before executing
-setopt HIST_NO_STORE          # Don't store calls to `history` or `fc`
-setopt SHARE_HISTORY          # Constantly share history between shell instances
-setopt EXTENDED_HISTORY       # Save time stamps and durations
-setopt INC_APPEND_HISTORY     # Constantly update $HISTFILE
-setopt NO_HIST_BEEP           # Disable that awful beep when you hit the edges of the history
+setopt auto_cd                         # Change path without specifying cd
 
 source $ZSH/oh-my-zsh.sh
 
-# load aliases and functions
+# Source aliases and functions
 source ~/.zsh_aliases
 source ~/.zsh_functions
 
