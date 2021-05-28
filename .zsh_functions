@@ -1,7 +1,8 @@
 # Measure zsh starting time
 
-timezsh() {
-  for i in $(seq 1 10); do time $SHELL -i -c exit; done
+shelltime() {
+  shell=${1-$SHELL} # Take an arguments or default
+  for i in $(seq 1 10); do time $shell -i -c exit; done
 }
 
 # only show full path when its a git directory powerlevel10k
