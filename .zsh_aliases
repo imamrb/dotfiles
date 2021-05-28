@@ -15,6 +15,10 @@ alias ls='exa --icons'
 alias preview="fzf --preview 'batcat --color \"always\" {}'"
 alias up='sudo apt update -y && sudo apt upgrade -y'
 
+# Networking
+
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+# alias dig="dig +nocmd any +multiline +noall +answer"
 
 # RAILS
 
