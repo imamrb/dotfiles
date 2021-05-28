@@ -62,6 +62,8 @@ For Details Explanation of these commands, checkout this blog [here](https://www
 
 - https://github.com/mathiasbynens/dotfiles
 - https://github.com/holman/dotfiles
+- https://github.com/paulirish/dotfiles
+- https://github.com/skwp/dotfiles
 - https://github.com/thoughtbot/dotfiles
 - https://github.com/webpro/awesome-dotfiles
 - https://github.com/zdharma/zinit-configs
