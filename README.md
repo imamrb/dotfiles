@@ -12,7 +12,7 @@ Learn more about it in this blog post: [The best way to store your dotfiles: A b
  - Theme: https://github.com/romkatv/powerlevel10k
  - Plugin Manager: https://github.com/zdharma/zinit
 
-Setup scripts for mac: [\Documents\MacSetup](Documents\MacSetup)
+Setup scripts for mac: [/Documents/MacSetup](Documents/MacSetup)
 
 ## Prerequisite
 
