@@ -119,8 +119,8 @@ zinit wait lucid light-mode for \
 		  	   changyuheng/zsh-interactive-cd
 
 # Don't bind these keys until ready
-bindkey -r '^[[A'
-bindkey -r '^[[B'
+bindkey -r '^[[A' # Arrow Up, `cat -v` for checking
+bindkey -r '^[[B' # Arrow Down
 function __bind_history_keys() {
   bindkey '^[[A' history-substring-search-up
   bindkey '^[[B' history-substring-search-down
