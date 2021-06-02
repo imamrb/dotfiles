@@ -1,4 +1,4 @@
-  #!/usr/bin/env bash
+#!/usr/bin/env bash
 
 # Install command-line tools using Homebrew.
 
@@ -15,25 +15,18 @@ if test ! $(which brew); then
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
-# Make sure we’re using the latest Homebrew.
-brew update
-
-# Upgrade any already-installed formulae.
-brew upgrade --all
+brew update                # Make sure we’re using the latest Homebrew.
+brew upgrade --all         # Upgrade any already-installed formulae.
 
 # Install GNU core utilities (those that come with OS X are outdated).
 # Don’t forget to add `$(brew --prefix coreutils)/libexec/gnubin` to `$PATH`.
 brew install coreutils
 sudo ln -s /usr/local/bin/gsha256sum /usr/local/bin/sha256sum
 
-# Install some other useful utilities like `sponge`.
-brew install moreutils
-# Install GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed.
-brew install findutils
-# Install GNU `sed`, overwriting the built-in `sed`.
-brew install gnu-sed
-# Install `wget` with IRI support.
-brew install wget
+brew install moreutils     # Install some other useful utilities like `sponge`.
+brew install findutils     # Install GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed.
+brew install gnu-sed       # Install GNU `sed`, overwriting the built-in `sed`.
+brew install wget          # Install `wget` with IRI support.
 
 # Install more recent versions of some OS X tools.
 brew install vim
@@ -42,18 +35,12 @@ brew install git-lfs
 brew install git-flow
 brew install git-extras
 
-# Install ruby-build and rbenv
-brew install ruby-build
-brew install rbenv
-LINE='eval "$(rbenv init -)"'
-grep -q "$LINE" ~/.zshrc || echo "$LINE" >> ~/.zshrc
-source ~/.zshrc
-
 # Apps
 brew install google-chrome
 brew install slack
 brew install flux
-brew install stats # system monitor in your menu bar
+brew install stats        # system monitor in your menu bar
+brew install runjs        # JavaScript emulator
 
 # Development tools
 brew install visual-studio-code
@@ -70,19 +57,6 @@ brew link libxml2 --force
 brew link libxslt --force
 brew install cmake
 brew install imagemagick
-# ruby-vips gem dependency
-brew install vips
-
-
-# nvm install-latest-npm
-
-# Install data stores
-brew tap homebrew/services
-brew install mysql@5.7
-brew install postgresql
-brew install redis
-brew install sequel-pro
-
 
 # Install Fonts
 brew tap homebrew/cask-fonts
@@ -95,24 +69,14 @@ brew install font-inconsolata
 brew install xpdf
 brew install exa
 brew install fzf
-brew install glow # Render markdown in cli, example: glow README.md
+brew install glow       # Render markdown in cli, example: glow README.md
+
+# Update Homebrew automatically
 brew tap homebrew/autoupdate
-brew autoupdate start 86400 # Update Homebrew automatically once in a day
+brew autoupdate start 86400 --upgrade
 
 # Remove outdated versions from the cellar.
 brew cleanup
-
-## Setup Rails
-
-# Install Necessary Ruby Versions
-rbenv install 2.7.2
-rbenv install 2.7.1
-rbenv global 2.7.2
-
-# Install some gems
-brew install shared-mime-info
-gem install ruby-vips
-gem install bundler
 
 ############################################
 #                  MORE                    #

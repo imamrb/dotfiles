@@ -40,7 +40,8 @@ alias gitwc='git config --global user.email imam.hossain@welldev.io; git config 
 alias ggrep='git grep -n'
 # git search and replace, original_text = $1, replace_text=$2
 alias gsed="git grep -l \$1 | xargs sed -i 's/\$1/\$2/g"
-
+alias gc='git commit -m'
+alias gs='git status'
 
 # POSTGRES
 

@@ -23,8 +23,8 @@ export ZSH="$HOME/.oh-my-zsh"
 POWERLEVEL9K_INSTANT_PROMPT=quiet      # Supress console output during initialization 
 UPDATE_ZSH_DAYS=15                     # Auto-update oh-my-zsh (in days).
 
-# This makes repository status check for large repositories much, much faster.
-DISABLE_UNTRACKED_FILES_DIRTY="true"   # Disable marking untracked files under VCS as dirty.
+# # This makes repository status check for large repositories much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"   # Disable marking untracked files under VCS as dirty.
 
 
 # History environment variables
@@ -37,14 +37,21 @@ setopt HIST_EXPIRE_DUPS_FIRST          # Expire duplicates first
 setopt HIST_IGNORE_DUPS                # Do not enter 2 consecutive duplicates into history
 setopt HIST_IGNORE_SPACE               # Ignore command lines with leading spaces
 setopt HIST_REDUCE_BLANKS              # Ignore unecessary whitespace
+setopt HIST_FIND_NO_DUPS               # Ignore duplicates when searching
+
 setopt HIST_VERIFY                     # Reload results of history expansion before executing
 setopt HIST_NO_STORE                   # Don't store calls to `history` or `fc`
+
 setopt SHARE_HISTORY                   # Constantly share history between shell instances
+setopt APPEND_HISTORY                  # Append history rather than overwrite
 setopt EXTENDED_HISTORY                # Save time stamps and durations
 setopt INC_APPEND_HISTORY              # Constantly update $HISTFILE
-setopt NO_HIST_BEEP                    # Disable that awful beep when you hit the edges of the history
 
-setopt auto_cd                         # Change path without specifying cd
+setopt NO_HIST_BEEP                    # Disable that awful beep when you hit the edges of the history
+setopt AUTO_CD                         # Change path without specifying cd
+setopt CORRECT
+setopt CORRECT_ALL
+
 
 source $ZSH/oh-my-zsh.sh
 
