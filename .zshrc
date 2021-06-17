@@ -20,7 +20,7 @@ fi
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-POWERLEVEL9K_INSTANT_PROMPT=quiet      # Supress console output during initialization 
+POWERLEVEL9K_INSTANT_PROMPT=quiet      # Supress console output during initialization
 UPDATE_ZSH_DAYS=15                     # Auto-update oh-my-zsh (in days).
 
 # # This makes repository status check for large repositories much, much faster.
@@ -48,9 +48,7 @@ setopt EXTENDED_HISTORY                # Save time stamps and durations
 setopt INC_APPEND_HISTORY              # Constantly update $HISTFILE
 
 setopt NO_HIST_BEEP                    # Disable that awful beep when you hit the edges of the history
-setopt AUTO_CD                         # Change path without specifying cd
-setopt CORRECT
-setopt CORRECT_ALL
+# setopt AUTO_CD                         # Change path without specifying cd
 
 
 source $ZSH/oh-my-zsh.sh
@@ -125,6 +123,9 @@ zinit wait lucid light-mode for \
 		  	   andrewferrier/fzf-z \
 		  	   changyuheng/zsh-interactive-cd
 
+zinit ice as"program" pick"bin/git-dsf"
+zinit light zdharma/zsh-diff-so-fancy
+
 # Don't bind these keys until ready
 bindkey -r '^[[A' # Arrow Up, `cat -v` for checking
 bindkey -r '^[[B' # Arrow Down
@@ -141,14 +142,6 @@ zinit ice wait lucid atload'_zsh_autosuggest_start'
 zinit light zsh-users/zsh-autosuggestions
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=10
 
-# Tab completions
-zinit ice wait lucid blockf atpull'zinit creinstall -q .'
-zinit light zsh-users/zsh-completions
-
-# Syntax highlighting
-zinit ice wait lucid atinit'zicompinit; zicdreplay'
-zinit light zdharma/fast-syntax-highlighting
-
 # Lazy load NVM
 export NVM_COMPLETION=true
 export NVM_LAZY_LOAD=true
@@ -158,6 +151,17 @@ zinit light lukechilds/zsh-nvm
 # rbenv
 zinit ice wait lucid
 zinit light htlsne/zinit-rbenv
+
+# Tab completions
+zinit ice wait lucid blockf atpull'zinit creinstall -q .'
+zinit light zsh-users/zsh-completions
+
+# Syntax highlighting
+zinit ice wait lucid atinit'zicompinit; zicdreplay'
+zinit light zdharma/fast-syntax-highlighting
+
+# # direnv
+# eval "$(direnv hook zsh)"
 
 # or
 # eval "$(rbenv init - --no-rehash)"

@@ -1,9 +1,9 @@
 # .dotfiles bare git 
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-alias dat='dotfiles add -u' # Stage all updates of tracked files
-alias dc='dotfiles commit -m '
-alias dp='dotfiles push'
-alias ds='dotfiles status'
+alias d='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias dat='d add -u' # Stage all updates of tracked files
+alias dc='d commit -m '
+alias dp='d push'
+alias dst='d status'
 
 # Process IDs occupying port 3000
 alias tcp='lsof -wni tcp:3000'
@@ -39,9 +39,20 @@ alias gitpc='git config --local user.email imam.swe@gmail.com; git config --loca
 alias gitwc='git config --global user.email imam.hossain@welldev.io; git config --global user.name "Imam Hossain";'
 alias ggrep='git grep -n'
 # git search and replace, original_text = $1, replace_text=$2
-alias gsed="git grep -l \$1 | xargs sed -i 's/\$1/\$2/g"
+alias gsed="git grep -l \$1 | xargs sed '' -e 's/\$1/\$2/g" # find and replace text
+unalias gc
+unalias gr
+unalias gp
+unalias gpf
+unalias gcp
 alias gc='git commit -m'
-alias gs='git status'
+alias gp='git push'
+alias gpf='git push -f'
+alias gpl='git pull'
+alias grbb="git checkout \$1 && git pull && git checkout - && git rebase \$1"    # pull and rebase with the desired branch
+alias grbp="git checkout \$1 && git pull && git checkout -"
+alias gcp='git branch | grep '^\*' | cut -d' ' -f2 | pbcopy'  # copy the name of the current branch
+alias gat='git add -u' # Stage all updates of tracked files
 
 # POSTGRES
 
