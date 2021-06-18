@@ -97,6 +97,8 @@ zinit wait lucid light-mode for \
                  OMZP::colored-man-pages \
 		         OMZP::jira
 
+zinit ice wait lucid
+zinit light Santho07/git-zsh
 
 # Source aliases and functions
 zinit ice wait lucid 
