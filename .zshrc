@@ -53,11 +53,6 @@ setopt NO_HIST_BEEP                    # Disable that awful beep when you hit th
 
 source $ZSH/oh-my-zsh.sh
 
-# Source aliases and functions
-source ~/.zsh_aliases
-source ~/.zsh_functions
-
-
 # - - - - - - - - - - - - - - - - - - - -
 # Zinit
 # - - - - - - - - - - - - - - - - - - - -
@@ -85,12 +80,6 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
-# git
-zinit wait lucid for \
-        OMZL::git.zsh \
-  atload"unalias grv" \
-        OMZP::git
-
 # - - - - - - - - - - - - - - - - - - - -
 # Theme
 # - - - - - - - - - - - - - - - - - - - -
@@ -105,7 +94,16 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k
 # OMZ Plugins Load first
 zinit wait lucid light-mode for \
 		         OMZP::rails \
+                 OMZP::colored-man-pages \
 		         OMZP::jira
+
+
+# Source aliases and functions
+zinit ice wait lucid 
+zinit snippet ~/.zsh_aliases
+zinit ice wait lucid 
+zinit snippet ~/.zsh_functions 
+                
 
 # - - - - - - - - - - - - - - - - - - - -
 # Begin zinits Plugins
@@ -123,7 +121,8 @@ zinit wait lucid light-mode for \
 		  	   andrewferrier/fzf-z \
 		  	   changyuheng/zsh-interactive-cd
 
-zinit ice as"program" pick"bin/git-dsf"
+# diff so fancy
+zinit ice wait lucid as"program" pick"bin/git-dsf"
 zinit light zdharma/zsh-diff-so-fancy
 
 # Don't bind these keys until ready
@@ -143,7 +142,6 @@ zinit light zsh-users/zsh-autosuggestions
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=10
 
 # Lazy load NVM
-export NVM_COMPLETION=true
 export NVM_LAZY_LOAD=true
 zinit ice wait lucid
 zinit light lukechilds/zsh-nvm
@@ -156,7 +154,7 @@ zinit light htlsne/zinit-rbenv
 zinit ice wait lucid blockf atpull'zinit creinstall -q .'
 zinit light zsh-users/zsh-completions
 
-# Syntax highlighting
+# Syntax highlighting, place at end
 zinit ice wait lucid atinit'zicompinit; zicdreplay'
 zinit light zdharma/fast-syntax-highlighting
 
@@ -169,14 +167,6 @@ zinit light zdharma/fast-syntax-highlighting
 # - - - - - - - - - - - - - - - - - - - -
 # END Zinit stuff
 # - - - - - - - - - - - - - - - - - - - -
-
-# https://gist.github.com/ctechols/ca1035271ad134841284  ################
-autoload -Uz compinit
-if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
-	compinit;
-else
-	compinit -C;
-fi;
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

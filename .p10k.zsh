@@ -34,6 +34,8 @@
     os_icon                 # os identifier
     dir                     # current directory
     vcs                     # git status
+    rbenv
+    nvm
     # =========================[ Line #2 ]=========================
     newline                 # \n
     prompt_char             # prompt symbol

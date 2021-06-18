@@ -14,6 +14,8 @@ export CLICOLOR=1
 export HOMEBREW_NO_ANALYTICS=1     
 export HOMEBREW_NO_AUTO_UPDATE=1 # Disable Homebrew Autoupdate, uses homebrew/autoupdate
 
+# follow symbolic links and don't want it to exclude hidden files
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 # jira Plugin Config
 
 JIRA_URL='https://welltravel.atlassian.net/'

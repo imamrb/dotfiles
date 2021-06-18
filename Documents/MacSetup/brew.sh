@@ -70,6 +70,8 @@ brew install xpdf
 brew install exa
 brew install fzf
 brew install glow       # Render markdown in cli, example: glow README.md
+brew install fd
+brew install ripgrep
 
 # Update Homebrew automatically
 brew tap homebrew/autoupdate
