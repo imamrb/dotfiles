@@ -90,26 +90,57 @@ setopt promptsubst
 ## needs: oh-my-zsh
 zinit ice depth=1; zinit light romkatv/powerlevel10k
 
-
-# OMZ Plugins Load first
-zinit wait lucid light-mode for \
-		         OMZP::rails \
-                 OMZP::colored-man-pages \
-		         OMZP::jira
-
-zinit ice wait lucid
-zinit light Santho07/git-zsh
-
 # Source aliases and functions
-zinit ice wait lucid 
-zinit snippet ~/.zsh_aliases
-zinit ice wait lucid 
-zinit snippet ~/.zsh_functions 
+source ~/.zsh_aliases
+source ~/.zsh_functions
+
+## these files can also be loaded using turbo mode
+## Requires zinit update <file> command to run after updating the file
+
+# zinit ice wait lucid 
+# zinit snippet ~/.zsh_aliases
+# zinit ice wait lucid 
+# zinit snippet ~/.zsh_functions 
                 
 
 # - - - - - - - - - - - - - - - - - - - -
 # Begin zinits Plugins
 # - - - - - - - - - - - - - - - - - - - -
+
+# OMZ Plugins Load first
+zinit wait lucid for \
+            OMZP::rails \
+            OMZP::colored-man-pages \
+            OMZP::extract \
+            OMZP::jira \
+            OMZP::docker-compose \
+        as"completion" \
+            OMZP::docker/_docker
+
+
+# Some utilities
+zinit wait lucid light-mode for \
+               djui/alias-tips \
+               supercrabtree/k \
+               micha/resty
+
+# git pager
+zinit ice wait lucid as"command" from"gh-r" mv"delta* -> delta" pick"delta/delta"
+zinit light dandavison/delta
+
+# After automatic unpacking it provides program "fzf".
+zinit ice from"gh-r" as"program"
+zinit light junegunn/fzf
+
+# # diff so fancy
+# zinit ice wait lucid as"program" pick"bin/git-dsf"
+# zinit light zdharma/zsh-diff-so-fancy
+
+zinit ice atclone"dircolors -b LS_COLORS > clrs.zsh" \
+    atpull'%atclone' pick"clrs.zsh" nocompile'!' \
+    atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”'
+zinit light trapd00r/LS_COLORS
+
 
 ## needs: zinit, fzf
 
@@ -123,10 +154,6 @@ zinit wait lucid light-mode for \
 		  	   andrewferrier/fzf-z \
 		  	   changyuheng/zsh-interactive-cd
 
-# diff so fancy
-zinit ice wait lucid as"program" pick"bin/git-dsf"
-zinit light zdharma/zsh-diff-so-fancy
-
 # Don't bind these keys until ready
 bindkey -r '^[[A' # Arrow Up, `cat -v` for checking
 bindkey -r '^[[B' # Arrow Down
@@ -134,14 +161,15 @@ function __bind_history_keys() {
   bindkey '^[[A' history-substring-search-up
   bindkey '^[[B' history-substring-search-down
 }
+
 # History substring searching
 zinit ice wait lucid atload'__bind_history_keys'
 zinit light zsh-users/zsh-history-substring-search
 
 # Autosuggestions, trigger precmd hook upon load
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=10
 zinit ice wait lucid atload'_zsh_autosuggest_start'
 zinit light zsh-users/zsh-autosuggestions
-export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=10
 
 # Lazy load NVM
 export NVM_LAZY_LOAD=true
@@ -151,20 +179,23 @@ zinit light lukechilds/zsh-nvm
 # rbenv
 zinit ice wait lucid
 zinit light htlsne/zinit-rbenv
+# or
+# eval "$(rbenv init - --no-rehash)"
+
 
 # Tab completions
 zinit ice wait lucid blockf atpull'zinit creinstall -q .'
 zinit light zsh-users/zsh-completions
 
 # Syntax highlighting, place at end
-zinit ice wait lucid atinit'zicompinit; zicdreplay'
+# use this line for profiling
+# zinit ice wait lucid atinit'zmodload zsh/zprof; zicompinit; zicdreplay' \
+#                                                atload'zprof | head -n 20; zmodload -u zsh/zprof'
+zinit ice wait lucid atinit'zicompinit; zicdreplay;'
 zinit light zdharma/fast-syntax-highlighting
 
 # # direnv
 # eval "$(direnv hook zsh)"
-
-# or
-# eval "$(rbenv init - --no-rehash)"
 
 # - - - - - - - - - - - - - - - - - - - -
 # END Zinit stuff
