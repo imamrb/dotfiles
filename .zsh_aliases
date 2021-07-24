@@ -1,4 +1,4 @@
-# Easier navigation: .., ..., ...., ....., ~ and -
+# Easier navigation: .., ..., ...., ....., and -
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
@@ -36,15 +36,15 @@ alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias killr='PID=tmp/pids/server.pid && test -f $PID && ps -p $(cat $PID) > /dev/null && kill -9 $(cat $PID) && echo kill rs success'
 alias rdsr='rails db:seed:replant'
 alias rdm='RAILS_ENV=development rails db:migrate'
-alias rtm='RAILS_ENV=test rails db:migrate'
+alias rtdm='RAILS_ENV=test rails db:migrate'
 alias rdcms='RAILS_ENV=development rake db:drop db:create db:migrate db:seed'
 
 
 # ZINIT
 
-alias ziu='zinit update'
-alias ziua='zinit update ~/.zsh_aliases'
-alias ziuf='zinit update ~/.zsh_functions'
+alias zu='zinit update'
+alias zd='zinit delete'
+alias zup='zinit update --parallel'
 
 # POSTGRES
 
@@ -67,10 +67,11 @@ alias rdstatus='brew services list'
 alias rdstop='brew services stop redis'
 
 
-# dotfiles bare git 
+# Dotfiles bare git repo shortcut
 
 alias d='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-alias dc='d commit -m '
+alias dc='d commit --verbose'
+alias dcm='d commit --verbose -m'
 alias dp='d push'
 alias ds='d status'
 alias dst='d status'
@@ -91,59 +92,119 @@ alias gaa='git add .'		                                               # Stage al
 alias gat='git add -u'			                                           # Stage all changes of tracked files only
 
 alias gb='git branch'
-alias gbcp='git branch | grep '^\*' | cut -d' ' -f2 | pbcopy'          # copy the name of the current branch
+alias gbr='git branch -r'
+alias gba='git branch -a'
+alias gbd='git branch --delete'
+alias gbdd='git branch --delete --force'
 
-alias gc='git commit'
-alias gcm='git commit -m'
-alias gcam='git commit --amend -m'                                     # add changes and modify last commit message
-alias gc!='git commit --amend --no-edit'                               # add changes to last commit without edit
+alias gc='git commit --verbose'
+alias gcm='git commit --verbose -m'
+alias gcam='git commit --verbose --amend -m'                                     # add changes and modify last commit message
+alias gcaf='git commit --amend --no-edit'                               # add changes to last commit without edit
+alias gcem='git commit --allow-empty -m'
+
 
 alias gcc='git clean -df && git checkout -- .'                         # delete unstaged files and discard all unstage changes
-alias gch='git checkout'
+alias gcho='git checkout'
+
+alias gchp='git cherry-pick'
+alias gchpc='git cherry-pick --continue'
+alias gchpa='git cherry-pick --abort'
+
+alias grv='git revert'
+alias grva='git revert --abort'
+alias grvm='git revert -m'
 
 alias gd='git diff'
 alias gdd='git diff develop'
 alias gdm='git diff master'
 alias gdc='git diff --cached'
+alias gdcs='git diff --cached --stat'
 alias gds='git diff --staged'
-alias gds='git diff HEAD'
+alias gdh='git diff HEAD'
 
 alias gf='git fetch'
 alias gfa='git fetch --all'
 alias gfp='git fetch --prune'
 
-alias gg='git grep -n'
-
-alias gm='git merge'
+alias gg='git grep'
+alias ggn='git grep -n'
 
 alias gl='git log'
 alias glp='git log --patch'
 alias glo='git log --oneline'
-alias glg='git log --graph --color --decorate --oneline'
+alias glgo='git log --graph --color --decorate --oneline'
+
+alias glsf='git ls-files'
 
 alias gp='git push'
 alias gpf='git push -f'
-alias gpl='git pull'
-alias gpll='git pull --all'
+alias gpd='git push --delete'
+alias gpsu='git push --set-upstream'
 
-alias gr='git rebase'
-alias gra='git rebase --abort'
-alias grc='git rebase --continue'
+alias gu='git pull'
+alias gur='git pull --rebase --autostash'
+alias gum='git pull --no-rebase'
+
+alias gm='git merge'
+alias gma='git merge --abort'
+
+alias grb='git rebase'
+alias grbi='git rebase --interactive'
+alias grbc='git rebase --continue'
+alias grbs='git rebase --skip'
+alias grba='git rebase --abort'
+
+alias gre='git remote'
+alias grel='git remote list'
+alias gres='git remote show'
 
 alias grs='git reset --soft'
 alias grs1='git reset --soft HEAD~1' # soft reset last commit 
 alias grh='git reset --hard'
 alias grh1='git reset --hard HEAD~1' # hard reset last commit
 
-alias gsts='git stash'
+alias grfl='git reflog'
+
+alias gn='git notes'
+alias gna='git notes add'
+alias gne='git notes edit'
+alias gnr='git notes remove'
+
+alias gsh='git show'
+
+alias gsm='git submodule'
+alias gsma='git submodule add'
+alias gsms='git submodule status'
+alias gsmi='git submodule init'
+alias gsmd='git submodule deinit'
+alias gsmu='git submodule update'
+alias gsmui='git submodule update --init --recursive'
+alias gsmf='git submodule foreach'
+alias gsmy='git submodule sync'
+
+alias gsta='git stash apply'
 alias gstp='git stash pop'
-alias gstl='git stash list'
-alias gstc='git stash clear'
 alias gstd='git stash drop'
+alias gstl='git stash list'
+alias gsts='git stash save'
+alias gstsu='git stash save --include-untracked'
+alias gstsp='git stash save --patch'
+alias gitsh='git stash show'
+alias gstsht='git stash show --text'
+alias gstshs='git stash show --stat'
+
 
 alias gitskip='git update-index --skip-worktree'
 alias gitnoskip='git update-index --no-skip-worktree'
 
+# copy branch name - to clipboard
+alias gcpbn='git branch | grep '^\*' | cut -d' ' -f2 | pbcopy'          # copy the name of the current branch
+
+# copy last commit id - to clipboard
+gcpli='git log -1 --format="%h" | pbcopy | echo copied `git log -1 --format="%h"`'
 
 # git search and replace, original_text = $1, replace_text=$2
-alias gsed="git grep -l \$1 | xargs sed '' -e 's/\$1/\$2/g" # find and replace text
+function gsed(){
+ git grep -l \$1 | xargs sed '' -e 's/\$1/\$2/g"
+}
