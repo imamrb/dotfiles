@@ -6,10 +6,11 @@ alias .....="cd ../../../.."
 alias -- -="cd -"
 
 # Shortcuts
-alias d="cd ~/Documents/Dropbox"
-alias dl="cd ~/Downloads"
-alias dt="cd ~/Desktop"
-alias p="cd ~/projects"
+alias doc="cd ~/Documents"
+alias dod="cd ~/Downloads"
+alias desk="cd ~/Desktop"
+alias pic="cd ~/Pictures"
+alias proj="cd ~/Projects"
 
 # Reload the shell (i.e. invoke as a login shell)
 alias reload="exec ${SHELL} -l"

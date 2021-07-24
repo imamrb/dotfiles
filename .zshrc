@@ -50,6 +50,19 @@ setopt INC_APPEND_HISTORY              # Constantly update $HISTFILE
 setopt NO_HIST_BEEP                    # Disable that awful beep when you hit the edges of the history
 # setopt AUTO_CD                         # Change path without specifying cd
 
+# only show full path when its a git directory powerlevel10k
+function zsh_directory_name() {
+  emulate -L zsh
+  [[ $1 == d ]] || return
+  while [[ $2 != / ]]; do
+    if [[ -e $2/.git ]]; then
+      typeset -ga reply=(${2:t} $#2)
+      return
+    fi
+    2=${2:h}
+  done
+  return 1
+}
 
 source $ZSH/oh-my-zsh.sh
 
@@ -132,15 +145,9 @@ zinit light dandavison/delta
 zinit ice from"gh-r" as"program"
 zinit light junegunn/fzf
 
-# # diff so fancy
-# zinit ice wait lucid as"program" pick"bin/git-dsf"
-# zinit light zdharma/zsh-diff-so-fancy
-
-zinit ice atclone"dircolors -b LS_COLORS > clrs.zsh" \
-    atpull'%atclone' pick"clrs.zsh" nocompile'!' \
-    atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”'
-zinit light trapd00r/LS_COLORS
-
+# diff so fancy
+zinit ice wait lucid as"program" pick"bin/git-dsf"
+zinit light zdharma/zsh-diff-so-fancy
 
 ## needs: zinit, fzf
 
