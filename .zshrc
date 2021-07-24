@@ -105,7 +105,6 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k
 
 # Source aliases and functions
 source ~/.zsh_aliases
-source ~/.zsh_functions
 
 ## these files can also be loaded using turbo mode
 ## Requires zinit update <file> command to run after updating the file

@@ -1,9 +1,27 @@
-# Easier navigation: .., ..., ...., ....., and -
+# SHELL
+
+# Measure zsh starting time
+shelltime() {
+  shell=${1-$SHELL} # Take an arguments or default
+  for i in $(seq 1 10); do time $shell -i -c exit; done
+}
+
+# Reload the shell (i.e. invoke as a login shell)
+alias reload="exec ${SHELL} -l"
+alias sz="source ~/.zshrc"
+
+# CD
+
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias -- -="cd -"
+
+# Create a new directory and enter it
+function mkd() {
+  mkdir -p "$@" && cd "$@"
+}
 
 # Shortcuts
 alias doc="cd ~/Documents"
@@ -12,8 +30,6 @@ alias desk="cd ~/Desktop"
 alias pic="cd ~/Pictures"
 alias proj="cd ~/Projects"
 
-# Reload the shell (i.e. invoke as a login shell)
-alias reload="exec ${SHELL} -l"
 
 # Process IDs occupying port 3000
 alias tcp='lsof -wni tcp:3000'
@@ -25,10 +41,7 @@ alias ls='exa --icons'
 alias preview="fzf --preview 'batcat --color \"always\" {}'"
 alias up='sudo apt update -y && sudo apt upgrade -y'
 
-# Networking
 
-alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
-# alias dig="dig +nocmd any +multiline +noall +answer"
 
 # RAILS
 
@@ -207,4 +220,123 @@ gcpli='git log -1 --format="%h" | pbcopy | echo copied `git log -1 --format="%h"
 # git search and replace, original_text = $1, replace_text=$2
 function gsed(){
  git grep -l \$1 | xargs sed '' -e 's/\$1/\$2/g"
+}
+
+gdiff() {
+  preview="git diff $@ --color=always -- {-1} | delta --line-numbers"
+  git diff $@ --name-only | fzf -m --ansi --preview $preview
+}
+
+
+# git commit browser. needs fzf
+glog() {
+  git log --graph --color=always \
+      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+  fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` \
+      --bind "ctrl-m:execute:
+                echo '{}' | grep -o '[a-f0-9]\{7\}' | head -1 |
+                xargs -I % sh -c 'git show --color=always % | delta --line-numbers'"
+}
+
+# Sync all projects with remote in the current directory
+pullall() {
+  # store the current dir
+  CUR_DIR=$(pwd)
+
+  # Let the person running the script know what's going on.
+  echo "\n\033[1mPulling in latest changes for all repositories...\033[0m\n"
+
+  # Find all git repositories and update it to the master latest revision
+  for i in $(find . -name ".git" | cut -c 3-); do
+      echo "";
+      echo "\033[33m"+$i+"\033[0m";
+
+      # We have to go to the .git parent directory to call the pull command
+      cd "$i";
+      cd ..;
+
+      # finally pull
+      git pull origin master;
+
+      # lets get back to the CUR_DIR
+      cd $CUR_DIR
+  done
+
+  echo "\n\033[32mComplete!\033[0m\n"
+}
+
+
+# Utilities
+
+# Networking
+
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias dig="dig +nocmd any +multiline +noall +answer"
+
+# preview csv files. source: http://stackoverflow.com/questions/1875305/command-line-csv-viewer
+function csvpreview(){
+      sed 's/,,/, ,/g;s/,,/, ,/g' "$@" | column -s, -t | less -#2 -N -S
+}
+
+# animated gifs from any video
+function gify() {
+  start=`date +%s`
+  # Usage function, displays valid arguments
+  usage() { echo "Usage: $0 [-f <fps, defaults to 15>] [-w <width, defaults to 640] inputfile" 1>&2; return 0; }
+
+  # Default variables
+  fps=15
+  width=640
+
+  # getopts to process the command line arguments
+  while getopts ":f:w:" opt; do
+      case "${opt}" in
+          f) fps=${OPTARG};;
+          w) width=${OPTARG};;
+          *) usage && return;;
+      esac
+  done
+
+  # shift out the arguments already processed with getopts
+  shift "$((OPTIND - 1))"
+  if (( $# == 0 )); then
+      echo >&2 'Missing input file\n'
+      usage >&2
+      return
+  fi
+
+  # set input variable to the first option after the arguments
+  input="$1"
+
+  # Extract filename from input file without the extension
+  filename=$(basename "$input")
+  #extension="${filename##*.}"
+  filename="${filename%.*}.gif"
+
+  # Debug display to show what the script is using as inputs
+  echo "Input: $#"
+  echo "Output: $filename"
+  echo "FPS: $fps"
+  echo "Width: $width"
+
+  # temporary file to store the first pass pallete
+  palette="/tmp/palette.png"
+
+  # options to pass to ffmpeg
+  filters="fps=$fps,scale=$width:-1:flags=lanczos"
+
+  # ffmpeg first pass
+  ffmpeg -v error -i "$input" -vf "$filters,palettegen" -y $palette
+
+  # ffmpeg second pass
+  ffmpeg -v error -i "$input" -i $palette -lavfi "$filters [x]; [x][1:v] paletteuse=dither=bayer:bayer_scale=3" -y "$filename"
+
+  end=`date +%s`
+  runtime=$((end-start))
+
+  # display output file size
+  filesize=$(du -h "$filename" | cut -f1)
+  echo "\nOutput File Name: $filename"
+  echo "Output File Size: $filesize"
+  echo "Time taken: $runtime seconds"
 }
