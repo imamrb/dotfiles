@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # SHELL
 
 # Measure zsh starting time
@@ -118,11 +120,11 @@ alias gcem='git commit --allow-empty -m'
 
 
 alias gcc='git clean -df && git checkout -- .'                         # delete unstaged files and discard all unstage changes
-alias gcho='git checkout'
+alias gco='git checkout'
 
-alias gchp='git cherry-pick'
-alias gchpc='git cherry-pick --continue'
-alias gchpa='git cherry-pick --abort'
+alias gcp='git cherry-pick'
+alias gcpc='git cherry-pick --continue'
+alias gcpa='git cherry-pick --abort'
 
 alias grv='git revert'
 alias grva='git revert --abort'
@@ -146,7 +148,7 @@ alias ggn='git grep -n'
 alias gl='git log'
 alias glp='git log --patch'
 alias glo='git log --oneline'
-alias glgo='git log --graph --color --decorate --oneline'
+alias glg='git log --graph --color --decorate --oneline'
 
 alias glsf='git ls-files'
 
@@ -173,7 +175,7 @@ alias grel='git remote list'
 alias gres='git remote show'
 
 alias grs='git reset --soft'
-alias grs1='git reset --soft HEAD~1' # soft reset last commit 
+alias grs1='git reset --soft HEAD~1' # soft reset last commit
 alias grh='git reset --hard'
 alias grh1='git reset --hard HEAD~1' # hard reset last commit
 
@@ -215,11 +217,11 @@ alias gitnoskip='git update-index --no-skip-worktree'
 alias gcpbn='git branch | grep '^\*' | cut -d' ' -f2 | pbcopy'          # copy the name of the current branch
 
 # copy last commit id - to clipboard
-gcpli='git log -1 --format="%h" | pbcopy | echo copied `git log -1 --format="%h"`'
+alias gcpli='git log -1 --format="%h" | pbcopy | echo copied `git log -1 --format="%h"`'
 
 # git search and replace, original_text = $1, replace_text=$2
 function gsed(){
- git grep -l \$1 | xargs sed '' -e 's/\$1/\$2/g"
+ git grep -l \$1 | xargs sed '' -e "s/\$1/\$2/g"
 }
 
 gdiff() {
@@ -243,7 +245,7 @@ pullall() {
   # store the current dir
   CUR_DIR=$(pwd)
 
-  # Let the person running the script know what's going on.
+  # Let the person running the script know what\'s going on.
   echo "\n\033[1mPulling in latest changes for all repositories...\033[0m\n"
 
   # Find all git repositories and update it to the master latest revision
