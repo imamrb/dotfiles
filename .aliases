@@ -214,7 +214,7 @@ alias gitskip='git update-index --skip-worktree'
 alias gitnoskip='git update-index --no-skip-worktree'
 
 # copy branch name - to clipboard
-alias gcpbn='git branch | grep '^\*' | cut -d' ' -f2 | pbcopy'          # copy the name of the current branch
+alias gcpbn="git branch | grep '^\*' | cut -d' ' -f2 | pbcopy"          # copy the name of the current branch
 
 # copy last commit id - to clipboard
 alias gcpli='git log -1 --format="%h" | pbcopy | echo copied `git log -1 --format="%h"`'

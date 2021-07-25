@@ -136,12 +136,12 @@ zinit wait lucid light-mode for \
                supercrabtree/k \
                micha/resty
 
-# git pager
+# delta git pager
 zinit ice wait lucid as"command" from"gh-r" mv"delta* -> delta" pick"delta/delta"
 zinit light dandavison/delta
 
 # After automatic unpacking it provides program "fzf".
-zinit ice from"gh-r" as"program"
+zinit ice wait lucid from"gh-r" as"program"
 zinit light junegunn/fzf
 
 # diff so fancy
@@ -154,11 +154,11 @@ zinit light zdharma/zsh-diff-so-fancy
 zinit ice wait blockf lucid
 zinit light rupa/z
 
-# z tab completion
+# tab completion
 zinit wait lucid light-mode for \
 		  	   changyuheng/fz \
 		  	   andrewferrier/fzf-z \
-		  	   changyuheng/zsh-interactive-cd
+               Aloxaf/fzf-tab
 
 # Don't bind these keys until ready
 bindkey -r '^[[A' # Arrow Up, `cat -v` for checking
@@ -177,8 +177,7 @@ export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=10
 zinit ice wait lucid atload'_zsh_autosuggest_start'
 zinit light zsh-users/zsh-autosuggestions
 
-# Lazy load NVM
-export NVM_LAZY_LOAD=true
+# NVM
 zinit ice wait lucid
 zinit light lukechilds/zsh-nvm
 
