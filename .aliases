@@ -12,6 +12,9 @@ shelltime() {
 alias reload="exec ${SHELL} -l"
 alias sz="source ~/.zshrc"
 
+
+alias nano="nvim"
+
 # CD
 
 alias ..="cd .."
@@ -21,7 +24,7 @@ alias .....="cd ../../../.."
 alias -- -="cd -"
 
 # Create a new directory and enter it
-function mkd() {
+function mcd() {
   mkdir -p "$@" && cd "$@"
 }
 
@@ -61,6 +64,13 @@ alias zu='zinit update'
 alias zd='zinit delete'
 alias zup='zinit update --parallel'
 
+# Brew
+
+alias bs='brew services'
+alias bsl='brew services list'
+alias bss='brew services star'
+alias bsq='brew services stop'
+
 # POSTGRES
 
 alias pgstart='brew services start postgresql'
@@ -81,17 +91,25 @@ alias rdstart='brew services start redis'
 alias rdstatus='brew services list'
 alias rdstop='brew services stop redis'
 
+# ALIASES
+
+alias ta='tmux attach -t'
+alias tad='tmux attach -d -t'
+alias ts='tmux new-session -s'
+alias tl='tmux list-sessions'
+alias tksv='tmux kill-server'
+alias tkss='tmux kill-session -t'
 
 # Dotfiles bare git repo shortcut
 
-alias d='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-alias dc='d commit --verbose'
-alias dcm='d commit --verbose -m'
-alias dp='d push'
-alias ds='d status'
-alias dst='d status'
-alias dat='d add -u'        # Stage all updates of tracked files
-alias dlo='d log --oneline'
+alias j='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias jc='j commit --verbose'
+alias jcm='j commit --verbose -m'
+alias jp='j push'
+alias js='j status'
+alias jst='j status'
+alias jat='j add -u'        # Stage all updates of tracked files
+alias jlo='j log --oneline'
 
 # Git
 
@@ -288,7 +306,7 @@ function gify() {
 
   # Default variables
   fps=15
-  width=640
+  width=840
 
   # getopts to process the command line arguments
   while getopts ":f:w:" opt; do

@@ -125,10 +125,10 @@ zinit wait lucid for \
             OMZP::colored-man-pages \
             OMZP::extract \
             OMZP::jira \
+            OMZP::jsontools\
             OMZP::docker-compose \
         as"completion" \
             OMZP::docker/_docker
-
 
 # Some utilities
 zinit wait lucid light-mode for \
@@ -192,11 +192,30 @@ zinit light htlsne/zinit-rbenv
 zinit ice wait lucid blockf atpull'zinit creinstall -q .'
 zinit light zsh-users/zsh-completions
 
+
+# compinit Imporoved
+# checking the cached .zcompdump file to see if it must be regenerated once a day.
+_zicompinit_custom() {
+  setopt extendedglob local_options
+  autoload -Uz compinit
+  local zcd=${ZDOTDIR:-$HOME}/.zcompdump
+  local zcdc="$zcd.zwc"
+  # Compile the completion dump to increase startup speed, if dump is newer or doesn't exist,
+  # in the background as this is doesn't affect the current session
+  if [[ -f "$zcd"(#qN.m+1) ]]; then
+        compinit -i -d "$zcd"
+        { rm -f "$zcdc" && zcompile "$zcd" } &!
+  else
+        compinit -C -d "$zcd"
+        { [[ ! -f "$zcdc" || "$zcd" -nt "$zcdc" ]] && rm -f "$zcdc" && zcompile "$zcd" } &!
+  fi
+}
+
 # Syntax highlighting, place at end
 # use this line for profiling
 # zinit ice wait lucid atinit'zmodload zsh/zprof; zicompinit; zicdreplay' \
 #                                                atload'zprof | head -n 20; zmodload -u zsh/zprof'
-zinit ice wait lucid atinit'zicompinit; zicdreplay;'
+zinit ice wait lucid atinit'_zicompinit_custom; zicdreplay;'
 zinit light zdharma/fast-syntax-highlighting
 
 # # direnv
