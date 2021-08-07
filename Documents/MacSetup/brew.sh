@@ -72,10 +72,12 @@ brew install fzf
 brew install glow       # Render markdown in cli, example: glow README.md
 brew install fd
 brew install ripgrep
+brew install tmux
 
 # Update Homebrew automatically
 brew tap homebrew/autoupdate
 brew autoupdate start 86400 --upgrade
+
 
 # Remove outdated versions from the cellar.
 brew cleanup

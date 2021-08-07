@@ -1,0 +1,39 @@
+[user]
+	email = imam.swe@gmail.com
+	name = Imam Hossain
+
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+
+[pull]
+	ff = true
+
+[core]
+	excludesFile = /Users/imam/.gitignore
+	pager = diff-so-fancy | less --tabs=2 -FXRi
+	# pager = delta --line-numbers
+
+[color]
+	diff = auto
+	interactive = auto
+
+[diff-so-fancy]
+	changeHunkIndicators = true
+	stripLeadingSymbols = false
+	markEmptyLines = true
+
+[color "diff"]
+	frag = magenta bold
+	meta = 11
+	func = 146 bold
+	whitespace = red reverse
+
+[delta]
+    line-numbers = true
+    navigate = true
+
+[interactive]
+    diffFilter = delta --color-only

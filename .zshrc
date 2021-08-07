@@ -50,6 +50,19 @@ setopt INC_APPEND_HISTORY              # Constantly update $HISTFILE
 setopt NO_HIST_BEEP                    # Disable that awful beep when you hit the edges of the history
 # setopt AUTO_CD                         # Change path without specifying cd
 
+# only show full path when its a git directory powerlevel10k
+function zsh_directory_name() {
+  emulate -L zsh
+  [[ $1 == d ]] || return
+  while [[ $2 != / ]]; do
+    if [[ -e $2/.git ]]; then
+      typeset -ga reply=(${2:t} $#2)
+      return
+    fi
+    2=${2:h}
+  done
+  return 1
+}
 
 source $ZSH/oh-my-zsh.sh
 
@@ -91,8 +104,7 @@ setopt promptsubst
 zinit ice depth=1; zinit light romkatv/powerlevel10k
 
 # Source aliases and functions
-source ~/.zsh_aliases
-source ~/.zsh_functions
+source ~/.aliases
 
 ## these files can also be loaded using turbo mode
 ## Requires zinit update <file> command to run after updating the file
@@ -113,10 +125,10 @@ zinit wait lucid for \
             OMZP::colored-man-pages \
             OMZP::extract \
             OMZP::jira \
+            OMZP::jsontools\
             OMZP::docker-compose \
         as"completion" \
             OMZP::docker/_docker
-
 
 # Some utilities
 zinit wait lucid light-mode for \
@@ -124,23 +136,17 @@ zinit wait lucid light-mode for \
                supercrabtree/k \
                micha/resty
 
-# git pager
+# delta git pager
 zinit ice wait lucid as"command" from"gh-r" mv"delta* -> delta" pick"delta/delta"
 zinit light dandavison/delta
 
 # After automatic unpacking it provides program "fzf".
-zinit ice from"gh-r" as"program"
+zinit ice wait lucid from"gh-r" as"program"
 zinit light junegunn/fzf
 
-# # diff so fancy
-# zinit ice wait lucid as"program" pick"bin/git-dsf"
-# zinit light zdharma/zsh-diff-so-fancy
-
-zinit ice atclone"dircolors -b LS_COLORS > clrs.zsh" \
-    atpull'%atclone' pick"clrs.zsh" nocompile'!' \
-    atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”'
-zinit light trapd00r/LS_COLORS
-
+# diff so fancy
+zinit ice wait lucid as"program" pick"bin/git-dsf"
+zinit light zdharma/zsh-diff-so-fancy
 
 ## needs: zinit, fzf
 
@@ -148,11 +154,11 @@ zinit light trapd00r/LS_COLORS
 zinit ice wait blockf lucid
 zinit light rupa/z
 
-# z tab completion
+# tab completion
 zinit wait lucid light-mode for \
 		  	   changyuheng/fz \
 		  	   andrewferrier/fzf-z \
-		  	   changyuheng/zsh-interactive-cd
+               Aloxaf/fzf-tab
 
 # Don't bind these keys until ready
 bindkey -r '^[[A' # Arrow Up, `cat -v` for checking
@@ -171,8 +177,7 @@ export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=10
 zinit ice wait lucid atload'_zsh_autosuggest_start'
 zinit light zsh-users/zsh-autosuggestions
 
-# Lazy load NVM
-export NVM_LAZY_LOAD=true
+# NVM
 zinit ice wait lucid
 zinit light lukechilds/zsh-nvm
 
@@ -187,11 +192,30 @@ zinit light htlsne/zinit-rbenv
 zinit ice wait lucid blockf atpull'zinit creinstall -q .'
 zinit light zsh-users/zsh-completions
 
+
+# compinit Imporoved
+# checking the cached .zcompdump file to see if it must be regenerated once a day.
+_zicompinit_custom() {
+  setopt extendedglob local_options
+  autoload -Uz compinit
+  local zcd=${ZDOTDIR:-$HOME}/.zcompdump
+  local zcdc="$zcd.zwc"
+  # Compile the completion dump to increase startup speed, if dump is newer or doesn't exist,
+  # in the background as this is doesn't affect the current session
+  if [[ -f "$zcd"(#qN.m+1) ]]; then
+        compinit -i -d "$zcd"
+        { rm -f "$zcdc" && zcompile "$zcd" } &!
+  else
+        compinit -C -d "$zcd"
+        { [[ ! -f "$zcdc" || "$zcd" -nt "$zcdc" ]] && rm -f "$zcdc" && zcompile "$zcd" } &!
+  fi
+}
+
 # Syntax highlighting, place at end
 # use this line for profiling
 # zinit ice wait lucid atinit'zmodload zsh/zprof; zicompinit; zicdreplay' \
 #                                                atload'zprof | head -n 20; zmodload -u zsh/zprof'
-zinit ice wait lucid atinit'zicompinit; zicdreplay;'
+zinit ice wait lucid atinit'_zicompinit_custom; zicdreplay;'
 zinit light zdharma/fast-syntax-highlighting
 
 # # direnv
