@@ -103,6 +103,14 @@ setopt promptsubst
 ## needs: oh-my-zsh
 zinit ice depth=1; zinit light romkatv/powerlevel10k
 
+# zinit ice pick"async.zsh" src"pure.zsh"
+# zinit light sindresorhus/pure
+
+# zinit light spaceship-prompt/spaceship-prompt
+
+zinit ice svn
+zinit snippet OMZ::plugins/tmux
+
 # Source aliases and functions
 source ~/.aliases
 
