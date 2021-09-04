@@ -129,6 +129,7 @@ alias gbr='git branch -r'
 alias gba='git branch -a'
 alias gbd='git branch --delete'
 alias gbdd='git branch --delete --force'
+alias gbdr='git push origin --delete'
 
 alias gc='git commit --verbose'
 alias gcm='git commit --verbose -m'
@@ -174,10 +175,11 @@ alias gp='git push'
 alias gpf='git push -f'
 alias gpd='git push --delete'
 alias gpsu='git push --set-upstream'
+alias gpcb='gpsu origin $(git branch --show-current)'
 
-alias gu='git pull'
-alias gur='git pull --rebase --autostash'
-alias gum='git pull --no-rebase'
+alias gpl='git pull'
+alias gplra='git pull --rebase --autostash'
+alias gplnr='git pull --no-rebase'
 
 alias gm='git merge'
 alias gma='git merge --abort'
@@ -196,6 +198,11 @@ alias grs='git reset --soft'
 alias grs1='git reset --soft HEAD~1' # soft reset last commit
 alias grh='git reset --hard'
 alias grh1='git reset --hard HEAD~1' # hard reset last commit
+alias grhr='git reset --hard `origin/$(git branch --show-current)`'
+
+# git restore
+alias grss='git restore --staged'
+alias grssa='git restore --staged .'
 
 alias grfl='git reflog'
 
@@ -227,7 +234,6 @@ alias gitsh='git stash show'
 alias gstsht='git stash show --text'
 alias gstshs='git stash show --stat'
 
-
 alias gitskip='git update-index --skip-worktree'
 alias gitnoskip='git update-index --no-skip-worktree'
 
@@ -256,6 +262,10 @@ glog() {
       --bind "ctrl-m:execute:
                 echo '{}' | grep -o '[a-f0-9]\{7\}' | head -1 |
                 xargs -I % sh -c 'git show --color=always % | delta --line-numbers'"
+}
+
+gsync() {
+  git checkout $1 && git pull && git checkout - && git rebase $1
 }
 
 # Sync all projects with remote in the current directory
@@ -289,9 +299,9 @@ pullall() {
 # Utilities
 
 # Networking
-
-alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias dig="dig +nocmd any +multiline +noall +answer"
+alias ip="dig +short o-o.myaddr.l.google.com @ns1.google.com"
+alias localIp="ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'"
 
 # preview csv files. source: http://stackoverflow.com/questions/1875305/command-line-csv-viewer
 function csvpreview(){
