@@ -55,8 +55,12 @@ alias killr='PID=tmp/pids/server.pid && test -f $PID && ps -p $(cat $PID) > /dev
 alias rdsr='rails db:seed:replant'
 alias rdm='RAILS_ENV=development rails db:migrate'
 alias rtdm='RAILS_ENV=test rails db:migrate'
-alias rdcms='RAILS_ENV=development rake db:drop db:create db:migrate db:seed'
-
+function rdcms() {
+  echo "\nInitiating rails db reset..."
+  RAILS_ENV=development bundle e rails db:drop db:create db:migrate
+  echo "\nSeeding..."
+  bundle e rails db:seed
+}
 
 # ZINIT
 
@@ -245,7 +249,7 @@ alias gcpli='git log -1 --format="%h" | pbcopy | echo copied `git log -1 --forma
 
 # git search and replace, original_text = $1, replace_text=$2
 function gsed(){
- git grep -l \$1 | xargs sed '' -e "s/\$1/\$2/g"
+ git grep -l $1 | xargs sed -i '' -e "s/$1/$2/g"
 }
 
 gdiff() {
