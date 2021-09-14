@@ -316,7 +316,7 @@ function csvpreview(){
 function gify() {
   start=`date +%s`
   # Usage function, displays valid arguments
-  usage() { echo "Usage: $0 [-f <fps, defaults to 15>] [-w <width, defaults to 640] inputfile" 1>&2; return 0; }
+  usage() { echo "Usage: $0 [-f <fps, defaults to 15>] [-w <width, defaults to 840] inputfile" 1>&2; return 0; }
 
   # Default variables
   fps=15
