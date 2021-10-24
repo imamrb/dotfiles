@@ -10,8 +10,6 @@ shelltime() {
 
 # Reload the shell (i.e. invoke as a login shell)
 alias reload="exec ${SHELL} -l"
-alias sz="source ~/.zshrc"
-
 
 alias nano="nvim"
 
@@ -22,6 +20,22 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias -- -="cd -"
+
+# DOTFILES
+
+alias j='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias jc='j commit --verbose'
+alias jcm='j commit --verbose -m'
+alias jp='j push'
+alias jpl='j pull'
+alias js='j status'
+alias jst='j status'
+alias jat='j add -u'        # Stage all updates of tracked files
+alias jlo='j log --oneline'
+
+
+alias sz="jpl && source ~/.zshrc"
+
 
 # Create a new directory and enter it
 function mcd() {
@@ -35,17 +49,6 @@ alias desk="cd ~/Desktop"
 alias pic="cd ~/Pictures"
 alias proj="cd ~/Projects"
 
-
-# DOTFILES
-
-alias j='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-alias jc='j commit --verbose'
-alias jcm='j commit --verbose -m'
-alias jp='j push'
-alias js='j status'
-alias jst='j status'
-alias jat='j add -u'        # Stage all updates of tracked files
-alias jlo='j log --oneline'
 
 # Process IDs occupying port 3000
 function tcp() {
@@ -298,8 +301,11 @@ glog() {
                 xargs -I % sh -c 'git show --color=always % | delta --line-numbers'"
 }
 
+# usage: 
+# gsync develop # will rebase with develop
+# gsync develop merge # will merge with develop
 gsync() {
-  git checkout $1 && git pull && git checkout - && git rebase $1
+  git checkout $1 && git pull && git checkout - && git "${2:-rebase}" $1
 }
 
 # Sync all projects with remote in the current directory
