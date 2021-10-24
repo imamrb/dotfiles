@@ -36,8 +36,21 @@ alias pic="cd ~/Pictures"
 alias proj="cd ~/Projects"
 
 
+# DOTFILES
+
+alias j='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias jc='j commit --verbose'
+alias jcm='j commit --verbose -m'
+alias jp='j push'
+alias js='j status'
+alias jst='j status'
+alias jat='j add -u'        # Stage all updates of tracked files
+alias jlo='j log --oneline'
+
 # Process IDs occupying port 3000
-alias tcp='lsof -wni tcp:3000'
+function tcp() {
+  lsof -wni tcp:${1:-3000}
+}
 
 # GNU
 
@@ -57,11 +70,36 @@ alias rdm='RAILS_ENV=development rails db:migrate'
 alias rtdm='RAILS_ENV=test rails db:migrate'
 function rdcms() {
   echo "\nInitiating rails db reset..."
-  RAILS_ENV=development bundle e rails db:drop db:create db:migrate
-  echo "\nSeeding..."
-  bundle e rails db:seed
+  bin/rails db:environment:set RAILS_ENV=development
+  bundle e rails db:drop db:create db:migrate db:seed
 }
 
+function rs() {
+
+  port=3000
+
+  if [ "$1" ] && ([ "$1" = "-p" ] || [ "$1" = "--port" ]) ; then
+    port="$2"  
+  fi
+
+  if ! [ -z "$(lsof -wni tcp:$port)" ]
+  then
+    echo -e "\e[1;31mStopping Running Process... \e[0m"
+    fuser -k -n tcp $port &> /dev/null
+  fi
+
+  PID=tmp/pids/server.pid
+
+  if [ -f $PID ]; then
+  	echo -e "\e[1;31mStopping Running Process... \e[0m"
+    kill -9 $(cat $PID)
+  	rm ./tmp/pids/server.pid 
+  fi
+
+  echo -e "\e[1;36mStarting Rails Server...\e[0m"
+
+  rails server "$@"
+}
 # ZINIT
 
 alias zu='zinit update'
@@ -104,17 +142,6 @@ alias tl='tmux list-sessions'
 alias tksv='tmux kill-server'
 alias tkss='tmux kill-session -t'
 
-# Dotfiles bare git repo shortcut
-
-alias j='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-alias jc='j commit --verbose'
-alias jcm='j commit --verbose -m'
-alias jp='j push'
-alias js='j status'
-alias jst='j status'
-alias jat='j add -u'        # Stage all updates of tracked files
-alias jlo='j log --oneline'
-
 # Git
 
 alias gitpc='git config --global user.email imam.swe@gmail.com; git config --global user.name "Imam Hossain";'
@@ -142,8 +169,10 @@ alias gcaf='git commit --amend --no-edit'                               # add ch
 alias gcem='git commit --allow-empty -m'
 
 
+alias gcb='git branch --show-current'
 alias gcc='git clean -df && git checkout -- .'                         # delete unstaged files and discard all unstage changes
 alias gco='git checkout'
+alias gcoa='git checkout .'
 
 alias gcp='git cherry-pick'
 alias gcpc='git cherry-pick --continue'
@@ -178,8 +207,9 @@ alias glsf='git ls-files'
 alias gp='git push'
 alias gpf='git push -f'
 alias gpd='git push --delete'
+alias gpdcb='git push --delete origin $(gcb)'
 alias gpsu='git push --set-upstream'
-alias gpcb='gpsu origin $(git branch --show-current)'
+alias gpcb='gpsu origin $(gcb)'
 
 alias gpl='git pull'
 alias gplra='git pull --rebase --autostash'
@@ -205,8 +235,8 @@ alias grh1='git reset --hard HEAD~1' # hard reset last commit
 alias grhr='git reset --hard `origin/$(git branch --show-current)`'
 
 # git restore
-alias grss='git restore --staged'
-alias grssa='git restore --staged .'
+alias gres='git restore --staged'
+alias gresa='git restore --staged .'
 
 alias grfl='git reflog'
 
@@ -308,15 +338,15 @@ alias ip="dig +short o-o.myaddr.l.google.com @ns1.google.com"
 alias localIp="ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'"
 
 # preview csv files. source: http://stackoverflow.com/questions/1875305/command-line-csv-viewer
-function csvpreview(){
-      sed 's/,,/, ,/g;s/,,/, ,/g' "$@" | column -s, -t | less -#2 -N -S
+function csv(){
+  sed 's/,,/, ,/g;s/,,/, ,/g' "$@" | column -s, -t | less -#2 -N -S
 }
 
 # animated gifs from any video
 function gify() {
   start=`date +%s`
   # Usage function, displays valid arguments
-  usage() { echo "Usage: $0 [-f <fps, defaults to 15>] [-w <width, defaults to 840] inputfile" 1>&2; return 0; }
+  usage() { echo "$0: [-f <fps, defaults to 15>] [-w <width, defaults to 840] inputfile" 1>&2; return 0; }
 
   # Default variables
   fps=15

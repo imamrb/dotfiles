@@ -129,7 +129,7 @@ source ~/.aliases
 
 # OMZ Plugins Load first
 zinit wait lucid for \
-            OMZP::rails \
+        atload"unalias rs" OMZP::rails \
             OMZP::colored-man-pages \
             OMZP::extract \
             OMZP::jira \
