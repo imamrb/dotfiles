@@ -295,11 +295,20 @@ gdiff() {
 glog() {
   git log --graph --color=always \
       --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
-  fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` \
+  fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
       --bind "ctrl-m:execute:
-                echo '{}' | grep -o '[a-f0-9]\{7\}' | head -1 |
-                xargs -I % sh -c 'git show --color=always % | delta --line-numbers'"
+                (grep -o '[a-f0-9]\{7\}' | head -1 |
+                xargs -I % sh -c 'git show --color=always % | delta --line-numbers') << 'FZF-EOF'
+                {}
+              FZF-EOF"
 }
+
+# glog() {
+#   preview="git diff $@ --color=always -- {-1} | delta --line-numbers"
+#   git log --graph --color=always \
+#       --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" | fzf -m --ansi --preview $preview
+# }
+
 
 # usage: 
 # gsync develop # will rebase with develop

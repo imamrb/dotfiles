@@ -1,10 +1,14 @@
 skip_global_compinit=1  # Skip the not really helping Ubuntu global compinit
 
 PATH="$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH"
-PATH="~/.rbenv/shims/rubocop:$PATH"
 PATH="~/.bin:/usr/local/sbin:$PATH"               # ensure dotfiles bin directory is loaded first
 PATH="/usr/local/opt/mysql@5.7/bin:$PATH"         # Export mysql path
 # PATH="$HOME/.rbenv/versions/2.7.2/bin:$PATH"
+
+# Load private environment variables if file exists
+if [ -f "$HOME/.zshenv_private" ]; then
+  source $HOME/.zshenv_private
+fi
 
 export PATH
 
@@ -30,3 +34,4 @@ JIRA_URL='https://welltravel.atlassian.net/'
 JIRA_NAME='imam.hossain'
 JIRA_PROJECT_KEY='LMS'
 JIRA_DEFAULT_ACTION='rapidboard'
+
