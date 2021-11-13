@@ -34,7 +34,7 @@ alias jat='j add -u'        # Stage all updates of tracked files
 alias jlo='j log --oneline'
 
 
-alias sz="jpl && source ~/.zshrc"
+alias sz="source ~/.zshrc"
 
 
 # Create a new directory and enter it
@@ -49,6 +49,15 @@ alias desk="cd ~/Desktop"
 alias pic="cd ~/Pictures"
 alias proj="cd ~/Projects"
 
+# ZINIT
+
+alias zu='zinit update'
+alias zup='zinit update --parallel'
+alias zd='zinit delete'
+alias zdc='zinit delete --clean' # Delete unused plugins
+alias zdc='zinit delete --all' # Delete all plugins
+alias zcu='zinit cuninstall zsh-users/zsh-completions'
+alias zci='zinit creinstall zsh-users/zsh-completions' # Fix compdef: unknown command or service
 
 # Process IDs occupying port 3000
 function tcp() {
@@ -61,7 +70,6 @@ alias ls='exa --icons'
 # alias cat='batcat'
 alias preview="fzf --preview 'batcat --color \"always\" {}'"
 alias up='sudo apt update -y && sudo apt upgrade -y'
-
 
 
 # RAILS
@@ -77,6 +85,7 @@ function rdcms() {
   bundle e rails db:drop db:create db:migrate db:seed
 }
 
+# Force run rails server.
 function rs() {
 
   port=3000
@@ -103,11 +112,6 @@ function rs() {
 
   rails server "$@"
 }
-# ZINIT
-
-alias zu='zinit update'
-alias zd='zinit delete'
-alias zup='zinit update --parallel'
 
 # Brew
 
@@ -292,15 +296,28 @@ gdiff() {
 
 
 # git commit browser. needs fzf
+# glog() {
+#   git log --graph --color=always \
+#       --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+#   fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+#       --bind "ctrl-m:execute:
+#                 (grep -o '[a-f0-9]\{7\}' | head -1 |
+#                 xargs -I % sh -c 'git show --color=always % | delta --line-numbers') << 'FZF-EOF'
+#                 {}
+#               FZF-EOF"
+# }
+
+alias glNoGraph='git log --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr% C(auto)%an" "$@"'
+local _gitLogLineToHash="echo {} | grep -o '[a-f0-9]\{7\}' | head -1"
+local _viewGitLogLine="$_gitLogLineToHash | xargs -I % sh -c 'git show --color=always % | delta --line-numbers'"
+
 glog() {
-  git log --graph --color=always \
-      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
-  fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
-      --bind "ctrl-m:execute:
-                (grep -o '[a-f0-9]\{7\}' | head -1 |
-                xargs -I % sh -c 'git show --color=always % | delta --line-numbers') << 'FZF-EOF'
-                {}
-              FZF-EOF"
+   glNoGraph |
+    fzf --no-sort --reverse --tiebreak=index --no-multi \
+        --ansi --preview="$_viewGitLogLine" \
+        --header "enter to view, alt-y to copy hash" \
+        --bind "enter:execute:$_viewGitLogLine   | less -R" \
+        --bind "alt-y:execute:$_gitLogLineToHash | xclip"
 }
 
 # glog() {
@@ -351,6 +368,16 @@ pullall() {
 alias dig="dig +nocmd any +multiline +noall +answer"
 alias ip="dig +short o-o.myaddr.l.google.com @ns1.google.com"
 alias localIp="ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'"
+
+# find all files with a given extension
+function findf() {
+  find . -name "*$1" -type f
+}
+
+# find and delete all files with a given extension
+function deletef() {
+  find . -name "*$1" -type f -delete
+}
 
 # preview csv files. source: http://stackoverflow.com/questions/1875305/command-line-csv-viewer
 function csv(){

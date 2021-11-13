@@ -24,13 +24,13 @@ POWERLEVEL9K_INSTANT_PROMPT=quiet      # Supress console output during initializ
 UPDATE_ZSH_DAYS=15                     # Auto-update oh-my-zsh (in days).
 
 # # This makes repository status check for large repositories much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"   # Disable marking untracked files under VCS as dirty.
+# DISABLE_UNTRACKED_FILES_DIRTY="true" # Disable marking untracked files under VCS as dirty.
 
 
 # History environment variables
 HISTFILE=${HOME}/.zsh_history
 HISTSIZE=50000                         # Maximum number of history entries to keep alive in one session
-SAVEHIST=10000                         # Maximum number of history entries to keep.
+SAVEHIST=20000                         # Maximum number of history entries to keep.
 HIST_STAMPS="mm/dd/yyyy"               # Set one of the following "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 
 setopt HIST_EXPIRE_DUPS_FIRST          # Expire duplicates first
@@ -64,6 +64,12 @@ function zsh_directory_name() {
   return 1
 }
 
+export DISABLE_AUTO_TITLE="true"
+precmd() {
+  # sets the terminal tab title to current dir
+  echo -ne "\e]1;${PWD##*/}\a"
+}
+
 source $ZSH/oh-my-zsh.sh
 
 # - - - - - - - - - - - - - - - - - - - -
@@ -72,9 +78,9 @@ source $ZSH/oh-my-zsh.sh
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
+    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
     command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.zinit/bin" && \
         print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
         print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
@@ -86,10 +92,10 @@ autoload -Uz _zinit
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
 zinit light-mode for \
-    zinit-zsh/z-a-rust \
-    zinit-zsh/z-a-as-monitor \
-    zinit-zsh/z-a-patch-dl \
-    zinit-zsh/z-a-bin-gem-node
+    zdharma-continuum/z-a-rust \
+    zdharma-continuum/z-a-as-monitor \
+    zdharma-continuum/z-a-patch-dl \
+    zdharma-continuum/z-a-bin-gem-node
 
 ### End of Zinit's installer chunk
 
@@ -117,11 +123,11 @@ source ~/.aliases
 ## these files can also be loaded using turbo mode
 ## Requires zinit update <file> command to run after updating the file
 
-# zinit ice wait lucid 
+# zinit ice wait lucid
 # zinit snippet ~/.zsh_aliases
-# zinit ice wait lucid 
-# zinit snippet ~/.zsh_functions 
-                
+# zinit ice wait lucid
+# zinit snippet ~/.zsh_functions
+
 
 # - - - - - - - - - - - - - - - - - - - -
 # Begin zinits Plugins
@@ -154,7 +160,7 @@ zinit light junegunn/fzf
 
 # diff so fancy
 zinit ice wait lucid as"program" pick"bin/git-dsf"
-zinit light zdharma/zsh-diff-so-fancy
+zinit light zdharma-continuum/zsh-diff-so-fancy
 
 ## needs: zinit, fzf
 
@@ -195,6 +201,16 @@ zinit light htlsne/zinit-rbenv
 # or
 # eval "$(rbenv init - --no-rehash)"
 
+# git extensions
+zinit as"null" wait"1" lucid for \
+    sbin    Fakerr/git-recall \
+    sbin    cloneopts paulirish/git-open \
+    sbin    paulirish/git-recent \
+    sbin    davidosomething/git-my \
+    sbin atload"export _MENU_THEME=legacy" \
+            arzzen/git-quick-stats \
+    sbin    iwata/git-now \
+
 
 # Tab completions
 zinit ice wait lucid blockf atpull'zinit creinstall -q .'
@@ -224,7 +240,7 @@ _zicompinit_custom() {
 # zinit ice wait lucid atinit'zmodload zsh/zprof; zicompinit; zicdreplay' \
 #                                                atload'zprof | head -n 20; zmodload -u zsh/zprof'
 zinit ice wait lucid atinit'_zicompinit_custom; zicdreplay;'
-zinit light zdharma/fast-syntax-highlighting
+zinit light zdharma-continuum/fast-syntax-highlighting
 
 # # direnv
 # eval "$(direnv hook zsh)"
