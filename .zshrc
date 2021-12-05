@@ -29,12 +29,13 @@ UPDATE_ZSH_DAYS=15                     # Auto-update oh-my-zsh (in days).
 
 # History environment variables
 HISTFILE=${HOME}/.zsh_history
-HISTSIZE=50000                         # Maximum number of history entries to keep alive in one session
-SAVEHIST=20000                         # Maximum number of history entries to keep.
-HIST_STAMPS="mm/dd/yyyy"               # Set one of the following "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+export HISTSIZE=10000000                # Maximum number of history entries to keep alive in one session
+export SAVEHIST=10000000                # Maximum number of history entries to keep.
+HIST_STAMPS="mm/dd/yyyy"                # Set one of the following "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 
 setopt HIST_EXPIRE_DUPS_FIRST          # Expire duplicates first
 setopt HIST_IGNORE_DUPS                # Do not enter 2 consecutive duplicates into history
+setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_IGNORE_SPACE               # Ignore command lines with leading spaces
 setopt HIST_REDUCE_BLANKS              # Ignore unecessary whitespace
 setopt HIST_FIND_NO_DUPS               # Ignore duplicates when searching
@@ -190,6 +191,10 @@ zinit light zsh-users/zsh-history-substring-search
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=10
 zinit ice wait lucid atload'_zsh_autosuggest_start'
 zinit light zsh-users/zsh-autosuggestions
+
+# Binds Ctrl-R to a widget that searches for multiple keywords
+zinit ice wait lucid
+zinit load zdharma-continuum/history-search-multi-word
 
 # NVM
 zinit ice wait lucid

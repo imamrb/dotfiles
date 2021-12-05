@@ -67,7 +67,7 @@ function tcp() {
 # GNU
 
 alias ls='exa --icons'
-# alias cat='batcat'
+alias cat='batcat'
 alias preview="fzf --preview 'batcat --color \"always\" {}'"
 alias up='sudo apt update -y && sudo apt upgrade -y'
 
@@ -77,6 +77,8 @@ alias up='sudo apt update -y && sudo apt upgrade -y'
 # Check if the file exist, check if the process exist with the PID, then kill rails server
 alias killr='PID=tmp/pids/server.pid && test -f $PID && ps -p $(cat $PID) > /dev/null && kill -9 $(cat $PID) && echo kill rs success'
 alias rdsr='rails db:seed:replant'
+alias rded='bin/rails db:environment:set RAILS_ENV=development'
+alias rdd='RAILS_ENV=development rails db:drop'
 alias rdm='RAILS_ENV=development rails db:migrate'
 alias rtdm='RAILS_ENV=test rails db:migrate'
 function rdcms() {
@@ -87,7 +89,6 @@ function rdcms() {
 
 # Force run rails server.
 function rs() {
-
   port=3000
 
   if [ "$1" ] && ([ "$1" = "-p" ] || [ "$1" = "--port" ]) ; then
@@ -275,8 +276,12 @@ alias gitsh='git stash show'
 alias gstsht='git stash show --text'
 alias gstshs='git stash show --stat'
 
-alias gitskip='git update-index --skip-worktree'
-alias gitnoskip='git update-index --no-skip-worktree'
+# checks for any files flagged w/ --skip-worktree alias
+alias gskipls="git ls-files -v|grep '^S'"
+# add --skip-worktree flag to file
+gskip() {  git update-index --skip-worktree "$@";  git status; }
+# remove --skip-worktree flag from file
+gunskip() {  git update-index --no-skip-worktree "$@";  git status; }
 
 # copy branch name - to clipboard
 alias gcpbn="git branch | grep '^\*' | cut -d' ' -f2 | pbcopy"          # copy the name of the current branch
@@ -340,25 +345,26 @@ pullall() {
   CUR_DIR=$(pwd)
 
   # Let the person running the script know what\'s going on.
-  echo "\n\033[1mPulling in latest changes for all repositories...\033[0m\n"
+  echo "\n\e[32mPulling in latest changes for all repositories...\e[0m\n"
 
   # Find all git repositories and update it to the master latest revision
   for i in $(find . -name ".git" | cut -c 3-); do
       echo "";
-      echo "\033[33m"+$i+"\033[0m";
+      echo "\n\e[33m" + $i + "\e[0m";
 
       # We have to go to the .git parent directory to call the pull command
       cd "$i";
       cd ..;
 
+      git fetch --all --prune
       # finally pull
-      git pull origin master;
+      git pull --all;
 
       # lets get back to the CUR_DIR
       cd $CUR_DIR
   done
 
-  echo "\n\033[32mComplete!\033[0m\n"
+  echo "\n\e[32mComplete!\e[0m\n"
 }
 
 
