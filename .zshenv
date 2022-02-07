@@ -5,13 +5,9 @@ PATH="~/.bin:/usr/local/sbin:$PATH"               # ensure dotfiles bin director
 PATH="/usr/local/opt/mysql@5.7/bin:$PATH"         # Export mysql path
 # PATH="$HOME/.rbenv/versions/2.7.2/bin:$PATH"
 
-# Load private environment variables if file exists
-if [ -f "$HOME/.zshenv_private" ]; then
-  source $HOME/.zshenv_private
-fi
-
 export PATH
 
+# Rails bundler gem installation flags
 export optflags="-Wno-error=implicit-function-declaration"
 export LDFLAGS="-L/opt/homebrew/opt/libffi/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/libffi/include"
@@ -38,8 +34,29 @@ export JQ_ZSH_PLUGIN_EXPAND_ALIASES=0
 
 export DISABLE_SPRING=true
 
-# jira Plugin Config
-JIRA_URL='https://welltravel.atlassian.net/'
-JIRA_NAME='imam.hossain'
-JIRA_PROJECT_KEY='LMS'
-JIRA_DEFAULT_ACTION='rapidboard'
+
+## .zshenv_private variables 
+
+# TOKEN=''
+# USERNAME=''
+
+# export NPM_TOKEN=$TOKEN
+# export GITHUB_PACKAGES_TOKEN=$TOKEN
+# export GH_PACKAGES_ACCESS_TOKEN=$TOKEN
+
+# export BUNDLE_RUBYGEMS__PKG__GITHUB__COM="$USERNAME:$TOKEN"
+
+# export BUNDLE_GITHUB__COM=$TOKEN
+
+# # jira Plugin Config
+# export JIRA_URL=''
+# export JIRA_NAME=''
+# export JIRA_PROJECT_KEY=''
+# export JIRA_DEFAULT_ACTION=''
+
+# Load private environment variables if file exists
+if [ -f "$HOME/.zshenv_private" ]; then
+  source $HOME/.zshenv_private
+else
+  echo ".zshenv_private not found!"
+fi
