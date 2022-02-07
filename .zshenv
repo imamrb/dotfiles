@@ -12,6 +12,12 @@ fi
 
 export PATH
 
+export optflags="-Wno-error=implicit-function-declaration"
+export LDFLAGS="-L/opt/homebrew/opt/libffi/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/libffi/include"
+export PKG_CONFIG_PATH="/opt/homebrew/opt/libffi/lib/pkgconfig"
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+
 export EDITOR=nvim
 export VISUAL="$EDITOR"
 export CLICOLOR=1
@@ -28,10 +34,12 @@ export LS_COLORS='rs=0:no=00:mi=00:mh=00:ln=01;36:or=01;31:di=01;34:ow=04;01;34:
 
 # follow symbolic links and don't want it to exclude hidden files
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
-# jira Plugin Config
+export JQ_ZSH_PLUGIN_EXPAND_ALIASES=0
 
+export DISABLE_SPRING=true
+
+# jira Plugin Config
 JIRA_URL='https://welltravel.atlassian.net/'
 JIRA_NAME='imam.hossain'
 JIRA_PROJECT_KEY='LMS'
 JIRA_DEFAULT_ACTION='rapidboard'
-

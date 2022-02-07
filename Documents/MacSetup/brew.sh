@@ -30,6 +30,7 @@ brew install wget          # Install `wget` with IRI support.
 
 # Install more recent versions of some OS X tools.
 brew install vim
+brew install nvim
 brew install git
 brew install git-lfs
 brew install git-flow
@@ -57,6 +58,7 @@ brew link libxml2 --force
 brew link libxslt --force
 brew install cmake
 brew install imagemagick
+brew install ffmpeg
 
 # Install Fonts
 brew tap homebrew/cask-fonts

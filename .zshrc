@@ -1,7 +1,7 @@
 # Set starting directory
-if [[ $PWD == $(realpath ~) ]]; then
-    cd $PWD/Projects
-fi
+# if [[ $PWD == $(realpath ~) ]]; then
+#     cd $PWD/Projects
+# fi
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -149,7 +149,9 @@ zinit wait lucid for \
 zinit wait lucid light-mode for \
                djui/alias-tips \
                supercrabtree/k \
-               micha/resty
+               micha/resty \
+	       reegnz/jq-zsh-plugin \
+	       b4b4r07/emoji-cli \
 
 # delta git pager
 zinit ice wait lucid as"command" from"gh-r" mv"delta* -> delta" pick"delta/delta"
@@ -256,3 +258,14 @@ zinit light zdharma-continuum/fast-syntax-highlighting
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust
+
+### End of Zinit's installer chunk
+eval "$(rbenv init -)"

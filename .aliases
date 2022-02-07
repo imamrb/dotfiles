@@ -67,7 +67,7 @@ function tcp() {
 # GNU
 
 alias ls='exa --icons'
-alias cat='batcat'
+# alias cat='batcat'
 alias preview="fzf --preview 'batcat --color \"always\" {}'"
 alias up='sudo apt update -y && sudo apt upgrade -y'
 
@@ -283,6 +283,14 @@ gskip() {  git update-index --skip-worktree "$@";  git status; }
 # remove --skip-worktree flag from file
 gunskip() {  git update-index --no-skip-worktree "$@";  git status; }
 
+gskipall() {
+  git status --porcelain | cut -c4- | xargs ls -1 2>/dev/null | xargs git update-index --skip-worktree
+}
+
+gunskipall() {
+  git ls-files -v | grep '^S' | cut -c3- | xargs ls -1 2>/dev/null | xargs git update-index --no-skip-worktree
+}
+
 # copy branch name - to clipboard
 alias gcpbn="git branch | grep '^\*' | cut -d' ' -f2 | pbcopy"          # copy the name of the current branch
 
@@ -356,9 +364,10 @@ pullall() {
       cd "$i";
       cd ..;
 
-      git fetch --all --prune
+      git fetch --prune
       # finally pull
-      git pull --all;
+      [[ `git branch --list master` ]] && git fetch origin master:master;
+      [[ `git branch --list develop` ]] && git fetch origin develop:develop;
 
       # lets get back to the CUR_DIR
       cd $CUR_DIR
