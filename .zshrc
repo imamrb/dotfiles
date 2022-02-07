@@ -139,7 +139,6 @@ zinit wait lucid for \
         atload"unalias rs" OMZP::rails \
             OMZP::colored-man-pages \
             OMZP::extract \
-            OMZP::jira \
             OMZP::jsontools\
             OMZP::docker-compose \
         as"completion" \
@@ -152,6 +151,7 @@ zinit wait lucid light-mode for \
                micha/resty \
 	       reegnz/jq-zsh-plugin \
 	       b4b4r07/emoji-cli \
+           Santho07/jira.plugin.zsh
 
 # delta git pager
 zinit ice wait lucid as"command" from"gh-r" mv"delta* -> delta" pick"delta/delta"
