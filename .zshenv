@@ -9,10 +9,13 @@ export PATH
 
 # Rails bundler gem installation flags
 export optflags="-Wno-error=implicit-function-declaration"
-export LDFLAGS="-L/opt/homebrew/opt/libffi/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/libffi/include"
-export PKG_CONFIG_PATH="/opt/homebrew/opt/libffi/lib/pkgconfig"
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+
+if [[ "$OSTYPE" =~ ^darwin ]]; then
+  export LDFLAGS="-L/opt/homebrew/opt/libffi/lib"
+  export CPPFLAGS="-I/opt/homebrew/opt/libffi/include"
+  export PKG_CONFIG_PATH="/opt/homebrew/opt/libffi/lib/pkgconfig"
+fi
 
 export EDITOR=nvim
 export VISUAL="$EDITOR"

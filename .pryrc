@@ -1,4 +1,3 @@
-
 # Using these pry gems -- copy to your Gemfile
 # group :development, :test do
 #   gem 'awesome_print' # pretty print ruby objects
@@ -14,10 +13,9 @@ begin
   require 'awesome_print'
   AwesomePrint.pry!
   puts 'Awesome Print enabled'
-rescue LoadError => error
+rescue LoadError => e
   puts 'Awesome Print not found!'
 end
-
 
 def now
   Time.new.strftime('%T%Z')
@@ -51,9 +49,9 @@ if Pry::Prompt[:rails] && Object.const_defined?('Apartment')
     current_tenant_name = proc { Pry::Helpers::Text.magenta(Apartment::Tenant.current) }
     name = 'multi_tenant'
     desc = 'rails prompt with apartment tenant name'
-    separators = %w(> *)
+    separators = %w[> *]
 
-    Pry::Prompt.add(name, desc, separators) do |_target_self, nest_level, pry, sep|
+    Pry::Prompt.add(name, desc, separators) do |_target_self, nest_level, _pry, sep|
       # "[#{pry.input_ring.size}] " \
       "[#{PryRails::Prompt.project_name}][#{PryRails::Prompt.formatted_env}]" \
       "[#{current_tenant_name.call}] " \
@@ -63,8 +61,8 @@ if Pry::Prompt[:rails] && Object.const_defined?('Apartment')
     puts
 
     Pry.config.prompt = Pry::Prompt[:multi_tenant]
-  rescue StandardError => error
-    puts error.inspect
+  rescue StandardError => e
+    puts e.inspect
   end
 end
 
@@ -82,44 +80,44 @@ if defined?(PryByebug)
   Pry.commands.alias_command 'w', 'whereami'
 end
 
-Pry.config.commands.alias_command "h", "hist -T 20", desc: "Last 20 commands"
-Pry.config.commands.alias_command "hg", "hist -T 20 -G", desc: "Up to 20 commands matching expression"
-Pry.config.commands.alias_command "hG", "hist -G", desc: "Commands matching expression ever used"
-Pry.config.commands.alias_command "hr", "hist -r", desc: "hist -r <command number> to run a command"
+Pry.config.commands.alias_command 'h', 'hist -T 20', desc: 'Last 20 commands'
+Pry.config.commands.alias_command 'hg', 'hist -T 20 -G', desc: 'Up to 20 commands matching expression'
+Pry.config.commands.alias_command 'hG', 'hist -G', desc: 'Commands matching expression ever used'
+Pry.config.commands.alias_command 'hr', 'hist -r', desc: 'hist -r <command number> to run a command'
 
 Pry.commands.alias_command '?', 'show-source -d'
 
 def more_help
   puts
-  puts "Helpful shortcuts:"
-  puts "hh  : hist -T 20       Last 20 commands"
-  puts "hg : hist -T 20 -G    Up to 20 commands matching expression"
-  puts "hG : hist -G          Commands matching expression ever used"
-  puts "hr : hist -r          hist -r <command number> to run a command"
+  puts 'Helpful shortcuts:'
+  puts 'hh  : hist -T 20       Last 20 commands'
+  puts 'hg : hist -T 20 -G    Up to 20 commands matching expression'
+  puts 'hG : hist -G          Commands matching expression ever used'
+  puts 'hr : hist -r          hist -r <command number> to run a command'
   puts
 
-  puts "Introspection"
+  puts 'Introspection'
   puts '$    :  show whole method of current context'
   puts '$ foo:  show definition of foo'
   puts '? foo:  show docs for foo'
   puts
   puts "Be careful not to use shortcuts for temp vars, like 'u = User.first`"
-  puts "Run `help` to see all the pry commands"
+  puts 'Run `help` to see all the pry commands'
 
-  puts "helper   : Access Rails helpers"
-  puts "app      : Access url_helpers"
+  puts 'helper   : Access Rails helpers'
+  puts 'app      : Access url_helpers'
   puts
-  puts "Sidekiq::Queue.new.clear              : To clear sidekiq"
-  puts "Sidekiq.redis { |r| puts r.flushall } : Another clear of sidekiq"
+  puts 'Sidekiq::Queue.new.clear              : To clear sidekiq'
+  puts 'Sidekiq.redis { |r| puts r.flushall } : Another clear of sidekiq'
   puts
   puts "Run `require 'factory_bot'; FactoryBot.find_definitions` for FactoryBot"
   puts
-  puts "Debugging Shortcuts"
+  puts 'Debugging Shortcuts'
   puts
 
   return '' unless defined?(PryByebug)
 
-  puts "Installed debugging Shortcuts"
+  puts 'Installed debugging Shortcuts'
   puts 'w  :  whereami'
   puts 's  :  step'
   puts 'n  :  next'
@@ -134,7 +132,7 @@ def more_help
   puts 'd  :  down'
   puts 'b  :  break'
   puts
-  ""
+  ''
 end
 
 # Utils
@@ -147,12 +145,10 @@ end
 
 def benchmark(repetitions = 100, &block)
   require 'benchmark'
-  Benchmark.bm{|b| b.report{repetitions.times(&block)}}
+  Benchmark.bm { |b| b.report { repetitions.times(&block) } }
 end
 
-unless defined?(Pry::Prompt)
-  Pry.config.prompt = Pry::NAV_PROMPT
-end
+Pry.config.prompt = Pry::NAV_PROMPT unless defined?(Pry::Prompt)
 
 # https://github.com/pry/pry/issues/2185#issuecomment-945082143
 ENV['PAGER'] = ' less --raw-control-chars -F -X'
