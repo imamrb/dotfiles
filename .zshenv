@@ -1,9 +1,10 @@
 skip_global_compinit=1  # Skip the not really helping Ubuntu global compinit
 
-PATH="$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH"
+PATH="$HOME/.rbenv/shims/:$HOME/.rbenv/bin:$PATH"
 PATH="~/.bin:/usr/local/sbin:$PATH"               # ensure dotfiles bin directory is loaded first
 PATH="/usr/local/opt/mysql@5.7/bin:$PATH"         # Export mysql path
 # PATH="$HOME/.rbenv/versions/2.7.2/bin:$PATH"
+PATH="/usr/local/texlive/2022/bin/x86_64-linux:$PATH"
 
 export PATH
 
@@ -35,7 +36,7 @@ export LS_COLORS='rs=0:no=00:mi=00:mh=00:ln=01;36:or=01;31:di=01;34:ow=04;01;34:
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export JQ_ZSH_PLUGIN_EXPAND_ALIASES=0
 
-export DISABLE_SPRING=true
+# export DISABLE_SPRING=true
 
 
 ## .zshenv_private variables 

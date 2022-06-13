@@ -299,7 +299,7 @@ alias gcpli='git log -1 --format="%h" | pbcopy | echo copied `git log -1 --forma
 
 # git search and replace, original_text = $1, replace_text=$2
 function gsed(){
- git grep -l $1 | xargs sed -i '' -e "s/$1/$2/g"
+  git grep -l $1 | xargs sed -i "s/$1/$2/g"
 }
 
 gdiff() {

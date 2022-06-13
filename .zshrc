@@ -1,7 +1,7 @@
 # Set starting directory
-# if [[ $PWD == $(realpath ~) ]]; then
-#     cd $PWD/Projects
-# fi
+if [[ $PWD == $(realpath ~) ]]; then
+    cd $PWD/Projects
+fi
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -29,9 +29,9 @@ UPDATE_ZSH_DAYS=15                     # Auto-update oh-my-zsh (in days).
 
 # History environment variables
 HISTFILE=${HOME}/.zsh_history
-export HISTSIZE=10000000                # Maximum number of history entries to keep alive in one session
-export SAVEHIST=10000000                # Maximum number of history entries to keep.
-HIST_STAMPS="mm/dd/yyyy"                # Set one of the following "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+export HISTSIZE=10000000               # Maximum number of history entries to keep alive in one session
+export SAVEHIST=10000000               # Maximum number of history entries to keep.
+HIST_STAMPS="mm/dd/yyyy"               # Set one of the following "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 
 setopt HIST_EXPIRE_DUPS_FIRST          # Expire duplicates first
 setopt HIST_IGNORE_DUPS                # Do not enter 2 consecutive duplicates into history
@@ -49,7 +49,7 @@ setopt EXTENDED_HISTORY                # Save time stamps and durations
 setopt INC_APPEND_HISTORY              # Constantly update $HISTFILE
 
 setopt NO_HIST_BEEP                    # Disable that awful beep when you hit the edges of the history
-# setopt AUTO_CD                         # Change path without specifying cd
+# setopt AUTO_CD                       # Change path without specifying cd
 
 # only show full path when its a git directory powerlevel10k
 function zsh_directory_name() {
@@ -149,17 +149,23 @@ zinit wait lucid light-mode for \
                djui/alias-tips \
                supercrabtree/k \
                micha/resty \
-	       reegnz/jq-zsh-plugin \
-	       b4b4r07/emoji-cli \
-           Santho07/jira.plugin.zsh
+    	       reegnz/jq-zsh-plugin \
+    	       b4b4r07/emoji-cli \
+               imamrb/jira.plugin.zsh
 
 # delta git pager
-zinit ice wait lucid as"command" from"gh-r" mv"delta* -> delta" pick"delta/delta"
-zinit light dandavison/delta
+# zinit ice wait lucid as"command" from"gh-r" mv"delta* -> delta" pick"delta/delta"
+# zinit light dandavison/delta
 
-# After automatic unpacking it provides program "fzf".
-zinit ice wait lucid from"gh-r" as"program"
-zinit light junegunn/fzf
+# After automatic unpacking it provides program from github releases
+# as"null" – a shorthand for pick"/dev/null" nocompletions – 
+# i.e.: it disables the default script-file sourcing and also the installation of completions.
+zinit wait"1" lucid from"gh-r" as"null" for \
+     sbin"fzf"          junegunn/fzf \
+     sbin"**/fd"        @sharkdp/fd \
+     sbin"**/bat"       @sharkdp/bat \
+     sbin"**/delta"     @dandavison/delta \
+     sbin"bin/exa"      @ogham/exa
 
 # diff so fancy
 zinit ice wait lucid as"program" pick"bin/git-dsf"
@@ -217,6 +223,7 @@ zinit as"null" wait"1" lucid for \
     sbin atload"export _MENU_THEME=legacy" \
             arzzen/git-quick-stats \
     sbin    iwata/git-now \
+            bobthecow/git-flow-completion
 
 
 # Tab completions

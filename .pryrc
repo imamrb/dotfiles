@@ -12,9 +12,8 @@
 begin
   require 'awesome_print'
   AwesomePrint.pry!
-  puts 'Awesome Print enabled'
 rescue LoadError => e
-  puts 'Awesome Print not found!'
+  puts 'awesome_print gem not found!'
 end
 
 def now
@@ -27,7 +26,7 @@ if defined?(Rails::Console)
   include Rails.application.routes.url_helpers # For testing routes in console
 end
 
-if Pry::Prompt[:rails] && PryRails::Prompt.project_name == 'agent'
+if Object.const_defined?('PryRails') && PryRails::Prompt.project_name == 'agent'
   def td
     Apartment::Tenant.switch! 'djungle'
   end
@@ -40,7 +39,7 @@ if Pry::Prompt[:rails] && PryRails::Prompt.project_name == 'agent'
     Apartment::Tenant.current
   end
 
-  td
+  td unless Tenant.count.zero?
 end
 
 # Custom prompt for Apartment MultiTenant Apps
@@ -51,10 +50,11 @@ if Pry::Prompt[:rails] && Object.const_defined?('Apartment')
     desc = 'rails prompt with apartment tenant name'
     separators = %w[> *]
 
-    Pry::Prompt.add(name, desc, separators) do |_target_self, nest_level, _pry, sep|
-      # "[#{pry.input_ring.size}] " \
+    Pry::Prompt.add(name, desc, separators) do |target_self, nest_level, pry, sep|
+      "[#{pry.input_ring.size}] " \
       "[#{PryRails::Prompt.project_name}][#{PryRails::Prompt.formatted_env}]" \
       "[#{current_tenant_name.call}] " \
+      "#{pry.config.prompt_name}(#{Pry.view_clip(target_self)})" \
       "#{":#{nest_level}" unless nest_level.zero?}#{sep} "
     end
 
@@ -63,6 +63,7 @@ if Pry::Prompt[:rails] && Object.const_defined?('Apartment')
     Pry.config.prompt = Pry::Prompt[:multi_tenant]
   rescue StandardError => e
     puts e.inspect
+    Pry.config.prompt = Pry::Prompt[:rails]
   end
 end
 
