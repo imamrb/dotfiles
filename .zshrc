@@ -168,7 +168,7 @@ zinit wait"1" lucid from"gh-r" as"null" for \
      sbin"bin/exa"      @ogham/exa
 
 # diff so fancy
-zinit ice wait lucid as"program" pick"bin/git-dsf"
+zinit ice wait lucid sbin"bin/git-dsf"
 zinit light zdharma-continuum/zsh-diff-so-fancy
 
 ## needs: zinit, fzf
