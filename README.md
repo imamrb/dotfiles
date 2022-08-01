@@ -19,10 +19,7 @@ Setup scripts for mac: [/Documents/MacSetup](Documents/MacSetup)
 
 # 2. Install zinit
 
-   sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
-
-# 3. Install fzf
-   brew install fzf
+   sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
 
 ```
 
@@ -37,7 +34,7 @@ Setup scripts for mac: [/Documents/MacSetup](Documents/MacSetup)
 ```bash
 
 
-   git clone --bare git@github.com:imamrb7/dotfiles.git $HOME/.dotfiles
+   git clone --bare git@github.com:imamrb/dotfiles.git $HOME/.dotfiles
 
    alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
    dotfiles config --local status.showUntrackedFiles no
