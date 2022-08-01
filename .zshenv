@@ -57,10 +57,3 @@ export JQ_ZSH_PLUGIN_EXPAND_ALIASES=0
 # export JIRA_NAME=''
 # export JIRA_PROJECT_KEY=''
 # export JIRA_DEFAULT_ACTION=''
-
-# Load private environment variables if file exists
-if [ -f "$HOME/.zshenv_private" ]; then
-  source $HOME/.zshenv_private
-else
-  echo ".zshenv_private not found!"
-fi
