@@ -1,5 +1,5 @@
 # Set starting directory
-if [[ $PWD == $(realpath ~) ]]; then
+if [[ $PWD == $(realpath ~) && -d "$PWD/Projects" ]]; then
     cd $PWD/Projects
 fi
 
@@ -115,11 +115,16 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k
 
 # zinit light spaceship-prompt/spaceship-prompt
 
-zinit ice svn
-zinit snippet OMZ::plugins/tmux
+# zinit ice svn
+# zinit snippet OMZ::plugins/tmux
 
 # Source aliases and functions
 source ~/.aliases
+
+# Load private environment variables if file exists
+if [[ -f "$HOME/.zshenv_private" ]]; then
+  source $HOME/.zshenv_private
+fi
 
 ## these files can also be loaded using turbo mode
 ## Requires zinit update <file> command to run after updating the file
