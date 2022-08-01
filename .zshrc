@@ -1,5 +1,5 @@
 # Set starting directory
-if [[ $PWD == $(realpath ~) && -d "$PWD/Projects" ]]; then
+if [[ $PWD == $HOME  && -d "$PWD/Projects" ]]; then
     cd $PWD/Projects
 fi
 

@@ -31,31 +31,31 @@ brew install wget          # Install `wget` with IRI support.
 # Install more recent versions of some OS X tools.
 brew install vim
 brew install nvim
-brew install git
-brew install git-lfs
-brew install git-flow
-brew install git-extras
+# brew install git
+# brew install git-lfs
+# brew install git-flow
+# brew install git-extras
 
 # Apps
-brew install google-chrome
-brew install slack
-brew install flux
-brew install stats        # system monitor in your menu bar
-brew install runjs        # JavaScript emulator
+# brew install google-chrome
+# brew install slack
+# brew install flux
+# brew install stats        # system monitor in your menu bar
+# brew install runjs        # JavaScript emulator
 
 # Development tools
 brew install visual-studio-code
 brew install sublime-text
-brew install recordit
-brew install iterm2
-brew install yarn
-brew install chromedriver
+# brew install recordit
+# brew install iterm2
+# brew install yarn
+# brew install chromedriver
 
 # Libraries
-brew install libxml2
-brew install libxslt
-brew link libxml2 --force
-brew link libxslt --force
+# brew install libxml2
+# brew install libxslt
+# brew link libxml2 --force
+# brew link libxslt --force
 brew install cmake
 brew install imagemagick
 brew install ffmpeg
@@ -68,13 +68,13 @@ brew install font-fira-mono-nerd-font
 brew install font-inconsolata
 
 # Other Tools
-brew install xpdf
-brew install exa
-brew install fzf
-brew install glow       # Render markdown in cli, example: glow README.md
-brew install fd
-brew install ripgrep
-brew install tmux
+# brew install xpdf
+# brew install exa
+# brew install fzf
+# brew install glow       # Render markdown in cli, example: glow README.md
+# brew install fd
+# brew install ripgrep
+# brew install tmux
 
 # Update Homebrew automatically
 brew tap homebrew/autoupdate
