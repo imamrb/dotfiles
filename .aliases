@@ -291,6 +291,11 @@ gunskipall() {
   git ls-files -v | grep '^S' | cut -c3- | xargs ls -1 2>/dev/null | xargs git update-index --no-skip-worktree
 }
 
+# Run rubocop only on staged files
+rbf() {
+  git diff --cached --name-only --diff-filter=ACM -z | xargs -0 ls -1 2>/dev/null | grep '\.rb$' | xargs bundle exec rubocop -A --force-exclusion "$@"
+}
+
 # copy branch name - to clipboard
 alias gcpbn="git branch | grep '^\*' | cut -d' ' -f2 | pbcopy"          # copy the name of the current branch
 
@@ -461,3 +466,4 @@ function gify() {
   echo "Output File Size: $filesize"
   echo "Time taken: $runtime seconds"
 }
+

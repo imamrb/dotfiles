@@ -8,6 +8,9 @@ defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 # Finder: disable window animations and Get Info animations
 defaults write com.apple.finder DisableAllAnimations -bool true
 
+# eyabard
+defaults write -g ApplePressAndHoldEnabled -bool false
+
 # Set Desktop as the default location for new Finder windows
 # For other paths, use `PfLo` and `file:///full/path/here/`
 defaults write com.apple.finder NewWindowTarget -string "PfDe"

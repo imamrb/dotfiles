@@ -152,11 +152,8 @@ zinit wait lucid for \
 # Some utilities
 zinit wait lucid light-mode for \
                djui/alias-tips \
-               supercrabtree/k \
-               micha/resty \
-    	       reegnz/jq-zsh-plugin \
     	       b4b4r07/emoji-cli \
-               imamrb/jira.plugin.zsh
+               imamrb/jira.plugin.zsh 
 
 # delta git pager
 # zinit ice wait lucid as"command" from"gh-r" mv"delta* -> delta" pick"delta/delta"
@@ -170,11 +167,24 @@ zinit wait"1" lucid from"gh-r" as"null" for \
      sbin"**/fd"        @sharkdp/fd \
      sbin"**/bat"       @sharkdp/bat \
      sbin"**/delta"     @dandavison/delta \
-     sbin"bin/exa"      @ogham/exa
+     sbin"bin/exa"      @ogham/exa \
+     sbin"tldr"         @isacikgoz/tldr
 
 # diff so fancy
 zinit ice wait lucid sbin"bin/git-dsf"
 zinit light zdharma-continuum/zsh-diff-so-fancy
+
+## ajaira
+# zinit wait lucid light-mode for \
+#                  reegnz/jq-zsh-plugin \
+#                  supercrabtree/k \
+#                  micha/resty
+
+# zinit ice wait node"tldr"
+# zinit light zdharma-continuum/null
+
+# zinit ice wait lucid gem'!pry'
+# zinit light zdharma-continuum/null
 
 ## needs: zinit, fzf
 
@@ -268,3 +278,6 @@ zinit light zdharma-continuum/fast-syntax-highlighting
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
