@@ -12,9 +12,9 @@ shelltime() {
 alias reload="exec ${SHELL} -l"
 
 alias nano="nvim"
+alias cat="bat -pp"
 
 # CD
-
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
@@ -22,7 +22,6 @@ alias .....="cd ../../../.."
 alias -- -="cd -"
 
 # DOTFILES
-
 alias j='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias jc='j commit --verbose'
 alias jcm='j commit --verbose -m'
@@ -50,7 +49,6 @@ alias pic="cd ~/Pictures"
 alias proj="cd ~/Projects"
 
 # ZINIT
-
 alias zu='zinit update'
 alias zup='zinit update --parallel'
 alias zd='zinit delete'
@@ -68,7 +66,7 @@ function tcp() {
 
 alias ls='exa --icons'
 # alias cat='batcat'
-alias preview="fzf --preview 'batcat --color \"always\" {}'"
+alias preview="fzf --preview 'bat --color \"always\" {}'"
 alias up='sudo apt update -y && sudo apt upgrade -y'
 
 
@@ -83,8 +81,8 @@ alias rdm='RAILS_ENV=development rails db:migrate'
 alias rtdm='RAILS_ENV=test rails db:migrate'
 function rdcms() {
   echo "\nInitiating rails db reset..."
-  bin/rails db:environment:set RAILS_ENV=development
-  bundle e rails db:drop db:create db:migrate db:seed
+  bin/rails RAILS_ENV=development db:environment:set
+  bundle e rails db:drop db:create db:schema:load db:migrate db:seed
 }
 
 # Force run rails server.
@@ -92,33 +90,41 @@ function rs() {
   port=3000
 
   if [ "$1" ] && ([ "$1" = "-p" ] || [ "$1" = "--port" ]) ; then
-    port="$2"  
-  fi
-
-  if ! [ -z "$(lsof -wni tcp:$port)" ]
-  then
-    echo -e "\e[1;31mStopping Running Process... \e[0m"
-    fuser -k -n tcp $port &> /dev/null
+    port="$2"
   fi
 
   PID=tmp/pids/server.pid
 
   if [ -f $PID ]; then
-  	echo -e "\e[1;31mStopping Running Process... \e[0m"
-    kill -9 $(cat $PID)
-  	rm ./tmp/pids/server.pid 
+    echo -e "\e[1;31mStopping Running Process... \e[0m"
+    
+    [ -s $PID ] && kill -9 $(cat $PID)
+    
+    rm ./tmp/pids/server.pid &> /dev/null 
+  fi
+
+  if ! [ -z "$(lsof -wni tcp:$port)" ]; then
+    echo -e "\e[1;31mStopping Running Process... \e[0m"
+    
+    fuser -k -n tcp $port &> /dev/null
   fi
 
   echo -e "\e[1;36mStarting Rails Server...\e[0m"
 
-  rails server "$@"
+  RAILS_ENV=development rails server "$@"
+}
+
+# Mac
+
+opena() {
+ open "/System/Volumes/Data/Applications/$@"
 }
 
 # Brew
 
 alias bs='brew services'
 alias bsl='brew services list'
-alias bss='brew services star'
+alias bss='brew services start'
 alias bsq='brew services stop'
 
 # POSTGRES
@@ -130,16 +136,11 @@ alias pgstop='brew services stop postgresql'
 
 # MySQL
 
-alias mqstart='brew services start mysql@5.7'
+alias mqstart='brew services start mysql'
 alias mqstatus='brew services list'
-alias mqstop='brew services stop mysql@5.7'
+alias mqstop='brew services stop mysql'
 alias mysql='mysql -u root' # mysql root user without password
 
-# Redis
-
-alias rdstart='brew services start redis'
-alias rdstatus='brew services list'
-alias rdstop='brew services stop redis'
 
 # ALIASES
 
@@ -160,8 +161,8 @@ alias gs='git status'
 alias gst='git status'
 
 alias ga='git add'
-alias gaa='git add .'		                                               # Stage all changes
-alias gat='git add -u'			                                           # Stage all changes of tracked files only
+alias gaa='git add .'	  # Stage all changes
+alias gat='git add -u'  # Stage all changes of tracked files only
 
 alias gb='git branch'
 alias gbr='git branch -r'
@@ -172,13 +173,13 @@ alias gbdr='git push origin --delete'
 
 alias gc='git commit --verbose'
 alias gcm='git commit --verbose -m'
-alias gcam='git commit --verbose --amend -m'                                     # add changes and modify last commit message
-alias gcaf='git commit --amend --no-edit'                               # add changes to last commit without edit
+alias gcam='git commit --verbose --amend -m' # add changes and modify last commit message
+alias gcaf='git commit --amend --no-edit'    # add changes to last commit without edit
 alias gcem='git commit --allow-empty -m'
 
 
 alias gcb='git branch --show-current'
-alias gcc='git clean -df && git checkout -- .'                         # delete unstaged files and discard all unstage changes
+alias gcc='git clean -df && git checkout -- .' # delete unstaged files and discard all unstage changes
 alias gco='git checkout'
 alias gcoa='git checkout .'
 
@@ -278,15 +279,11 @@ alias gstshs='git stash show --stat'
 
 # checks for any files flagged w/ --skip-worktree alias
 alias gskipls="git ls-files -v|grep '^S'"
-# add --skip-worktree flag to file
-gskip() {  git update-index --skip-worktree "$@";  git status; }
-# remove --skip-worktree flag from file
-gunskip() {  git update-index --no-skip-worktree "$@";  git status; }
-
+gskip() {  git update-index --skip-worktree "$@";  git status; } # add --skip-worktree flag to file
+gunskip() {  git update-index --no-skip-worktree "$@";  git status; } # remove --skip-worktree flag from file
 gskipall() {
   git status --porcelain | cut -c4- | xargs ls -1 2>/dev/null | xargs git update-index --skip-worktree
 }
-
 gunskipall() {
   git ls-files -v | grep '^S' | cut -c3- | xargs ls -1 2>/dev/null | xargs git update-index --no-skip-worktree
 }
@@ -300,11 +297,15 @@ rbf() {
 alias gcpbn="git branch | grep '^\*' | cut -d' ' -f2 | pbcopy"          # copy the name of the current branch
 
 # copy last commit id - to clipboard
-alias gcpli='git log -1 --format="%h" | pbcopy | echo copied `git log -1 --format="%h"`'
+alias gcplci='git log -1 --format="%h" | pbcopy | echo copied `git log -1 --format="%h"`'
 
 # git search and replace, original_text = $1, replace_text=$2
 function gsed(){
-  git grep -l $1 | xargs sed -i "s/$1/$2/g"
+  if [[ "$OSTYPE" =~ ^darwin ]]; then
+    git grep -l $1 | xargs sed -i'' -e "s/$1/$2/g"
+  else
+    git grep -l $1 | xargs sed -i "s/$1/$2/g"
+  fi
 }
 
 gdiff() {
@@ -312,24 +313,18 @@ gdiff() {
   git diff $@ --name-only | fzf -m --ansi --preview $preview
 }
 
+batdiff() {
+  git diff $@ --name-only --relative --diff-filter=d | xargs bat --diff
+}
 
-# git commit browser. needs fzf
-# glog() {
-#   git log --graph --color=always \
-#       --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
-#   fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
-#       --bind "ctrl-m:execute:
-#                 (grep -o '[a-f0-9]\{7\}' | head -1 |
-#                 xargs -I % sh -c 'git show --color=always % | delta --line-numbers') << 'FZF-EOF'
-#                 {}
-#               FZF-EOF"
-# }
+
+local dsfpreview="diff-so-fancy | less --tabs=2 -FXRi"
 
 alias glNoGraph='git log --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr% C(auto)%an" "$@"'
-local _gitLogLineToHash="echo {} | grep -o '[a-f0-9]\{7\}' | head -1"
-local _viewGitLogLine="$_gitLogLineToHash | xargs -I % sh -c 'git show --color=always % | delta --line-numbers'"
-
 glog() {
+  local _gitLogLineToHash="echo {} | grep -o '[a-f0-9]\{7\}' | head -1"
+  local _viewGitLogLine="$_gitLogLineToHash | xargs -I % sh -c 'git show --color=always % | $dsfpreview'"
+
    glNoGraph |
     fzf --no-sort --reverse --tiebreak=index --no-multi \
         --ansi --preview="$_viewGitLogLine" \
@@ -337,13 +332,6 @@ glog() {
         --bind "enter:execute:$_viewGitLogLine   | less -R" \
         --bind "alt-y:execute:$_gitLogLineToHash | xclip"
 }
-
-# glog() {
-#   preview="git diff $@ --color=always -- {-1} | delta --line-numbers"
-#   git log --graph --color=always \
-#       --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" | fzf -m --ansi --preview $preview
-# }
-
 
 # usage: 
 # gsync develop # will rebase with develop

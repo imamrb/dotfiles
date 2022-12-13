@@ -6,6 +6,7 @@ PATH="/usr/local/mysql/bin:$PATH"         # Export mysql path
 # PATH="$HOME/.rbenv/versions/2.7.2/bin:$PATH"
 PATH="/usr/local/texlive/2022/bin/x86_64-linux:$PATH"
 # PATH="/opt/homebrew/opt/mysql/bin:$PATH"
+PATH="$HOME/.local/share/bin:$PATH"
 export PATH
 
 # mysql@5.7 is keg-only, which means it was not symlinked into /opt/homebrew,
@@ -50,6 +51,7 @@ export LS_COLORS='rs=0:no=00:mi=00:mh=00:ln=01;36:or=01;31:di=01;34:ow=04;01;34:
 # follow symbolic links and don't want it to exclude hidden files
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export JQ_ZSH_PLUGIN_EXPAND_ALIASES=0
+# export RAILS_ENV=test
 
 # export DISABLE_SPRING=true
 

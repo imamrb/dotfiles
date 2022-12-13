@@ -16,9 +16,12 @@ rescue LoadError => e
   puts 'awesome_print gem not found!'
 end
 
-def now
-  Time.new.strftime('%T%Z')
+class Object
+  def local_methods(obj = self) # list methods which aren't in superclass
+    (obj.methods - obj.class.superclass.instance_methods).sort
+  end
 end
+
 
 if defined?(Rails::Console)
   ActiveRecord::Base.logger = Logger.new(STDOUT)

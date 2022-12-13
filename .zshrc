@@ -118,8 +118,11 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k
 # zinit ice svn
 # zinit snippet OMZ::plugins/tmux
 
+#compdef '_files -W "/System/Volumes/Data/Applications/*"' opena
+
 # Source aliases and functions
 source ~/.aliases
+
 
 # Load private environment variables if file exists
 if [[ -f "$HOME/.zshenv_private" ]]; then
@@ -167,8 +170,8 @@ zinit wait"1" lucid from"gh-r" as"null" for \
      sbin"**/fd"        @sharkdp/fd \
      sbin"**/bat"       @sharkdp/bat \
      sbin"**/delta"     @dandavison/delta \
-     sbin"bin/exa"      @ogham/exa \
-     sbin"tldr"         @isacikgoz/tldr
+     sbin"bin/exa"      @ogham/exa
+     # sbin"tldr"         @isacikgoz/tldr
 
 # diff so fancy
 zinit ice wait lucid sbin"bin/git-dsf"
@@ -219,9 +222,14 @@ zinit light zsh-users/zsh-autosuggestions
 zinit ice wait lucid
 zinit load zdharma-continuum/history-search-multi-word
 
-# NVM
-zinit ice wait lucid
-zinit light lukechilds/zsh-nvm
+# ASDF
+
+zinit ice wait lucid fsrc"asdf.sh -> asdf"
+zinit light asdf-vm/asdf
+
+# # NVM
+# zinit ice wait lucid
+# zinit light lukechilds/zsh-nvm
 
 # rbenv
 zinit ice wait lucid
