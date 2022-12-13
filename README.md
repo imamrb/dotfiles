@@ -1,8 +1,4 @@
-# My Dotfiles
-
-Yet another dotfiles repository. But these are mine.
-
-## What's In It
+# Dotfiles ⚡
 
  - Shell: https://github.com/ohmyzsh/ohmyzsh
  - Theme: https://github.com/romkatv/powerlevel10k
@@ -14,22 +10,19 @@ Setup scripts for mac: [/Documents/MacSetup](Documents/MacSetup)
 
 ```bash
 # 1. Install oh_my_zsh
-
    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # 2. Install zinit
-
    sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
-
 ```
 
 ## Installing on a new machine
-- 1. Clone the repository to ~/.dotfiles folder
-- 2. Ignore the repo to avoid tracking itself
-- 3. Define an alias named `dotfiles` which will work substitute `git` command
-- 4. Don't show untracked files in `dotfiles status`
-- 5. Backup the existing files to `.dotfiles-backup` folder and replace them with newer ones.
-- 6. Checkout the actual content from your .dotfiles repository to $HOME
+- Clone the repository to ~/.dotfiles folder
+- Ignore the repo to avoid tracking itself
+- Define an alias named `dotfiles` which will work substitute `git` command
+- Don't show untracked files in `dotfiles status`
+- Backup the existing files to `.dotfiles-backup` folder and replace them with newer ones.
+- Checkout the actual content from your .dotfiles repository to $HOME
 
 ```bash
 
