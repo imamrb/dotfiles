@@ -36,6 +36,13 @@ brew install nvim
 # brew install git-flow
 # brew install git-extras
 
+
+## Tools
+brew install htop
+brew install eza
+brew install raycast
+brew install --cask monitorcontrol
+
 # Apps
 # brew install google-chrome
 # brew install slack
