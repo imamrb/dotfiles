@@ -42,6 +42,7 @@ brew install htop
 brew install eza
 brew install raycast
 brew install --cask monitorcontrol
+brew install isacikgoz/taps/tldr
 
 # Apps
 # brew install google-chrome

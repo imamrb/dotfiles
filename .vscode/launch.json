@@ -1,0 +1,59 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    // {
+    //   "type": "rdbg",
+    //   "name": "Attach rails-web with rdbg",
+    //   "request": "attach",
+
+    //   // remove the following "preLaunchTask" if you do not wish to stop and start
+    //   // GitLab via VS Code but manually on a separate terminal.
+    //   "preLaunchTask": "start rdbg for rails-web"
+    // },
+    // {
+    //   "type": "rdbg",
+    //   "name": "Attach rails-background-jobs with rdbg",
+    //   "request": "attach",
+
+    //   // remove the following "preLaunchTask" if you do not wish to stop and start
+    //   // GitLab via VS Code but manually on a separate terminal.
+    //   "preLaunchTask": "start rdbg for rails-background-jobs"
+    // },
+    {
+      "type": "ruby_lsp",
+      "name": "Start rails-web with ruby_lsp",
+      "request": "attach",
+      // remove the following "preLaunchTask" if you do not wish to stop and start
+      // GitLab via VS Code but manually on a separate terminal.
+      "preLaunchTask": "start rdbg for rails-web"
+    },
+    {
+      "type": "ruby_lsp",
+      "name": "Start rails-background-jobs with ruby_lsp",
+      "request": "attach",
+      // remove the following "preLaunchTask" if you do not wish to stop and start
+      // GitLab via VS Code but manually on a separate terminal.
+      "preLaunchTask": "start rdbg for rails-background-jobs"
+    },
+    {
+      "type": "ruby_lsp",
+      "name": "Attach rails-web with ruby_lsp",
+      "request": "attach",
+    },
+    {
+      "type": "ruby_lsp",
+      "name": "Attach rails-background-jobs with ruby_lsp",
+      "request": "attach"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug rails-web & rails-background-jobs",
+      "configurations": ["Start rails-background-jobs with ruby_lsp", "Start rails-web with ruby_lsp"],
+      "stopAll": true
+    }
+  ]
+}

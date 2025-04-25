@@ -1,0 +1,39 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "start rdbg for rails-web",
+      "type": "shell",
+      "command": "gdk stop rails-web && GITLAB_RAILS_RACK_TIMEOUT_ENABLE_LOGGING=false PUMA_SINGLE_MODE=true rdbg --open -c -n bin/rails server",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "ruby_lsp",
+        "pattern": {
+          "regexp": "^.*$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^(ok: down:).*$",
+          "endsPattern": "^(DEBUGGER:).*$"
+        }
+      }
+    },
+    {
+      "label": "start rdbg for rails-background-jobs",
+      "type": "shell",
+      "command": "gdk stop rails-background-jobs && rdbg --open -c -n bundle exec sidekiq",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "ruby_lsp",
+        "pattern": {
+          "regexp": "^(DEBUGGER:).*$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^(ok: down:).*$",
+          "endsPattern": "^(DEBUGGER:).*$"
+        }
+      }
+    }
+  ]
+}
