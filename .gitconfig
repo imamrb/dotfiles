@@ -1,6 +1,18 @@
 [user]
-	email = imam.swe@gmail.com
+	email = ihossain@gitlab.com
 	name = Imam Hossain
+	signingkey = EDF2AF1480342316
+
+[commit]
+	gpgsign = true
+
+path = ~/.gitconfig-work
+
+[includeIf "gitdir:~/Work/"]
+  path = ~/.gitconfig-work
+
+[includeIf "gitdir:~/Private/"]
+  path = ~/.gitconfig-personal
 
 [filter "lfs"]
 	process = git-lfs filter-process
@@ -12,9 +24,10 @@
 	ff = true
 
 [core]
-	excludesFile = /Users/imam/.gitignore
+	excludesFile = /Users/imho/.gitignore
 	pager = diff-so-fancy | less --tabs=2 -FXRi
 	autocrlf = input
+	# fsmonitor = true
 	# pager = delta --line-numbers
 
 [color]
@@ -44,3 +57,16 @@
 
 [open "https://ssh.github.com"]
 	domain = github.com
+
+[maintenance]
+	repo = /Users/imho/Work/gdk/gitlab
+	repo = /Users/imho/Work/gdk
+	repo = /Users/imho/Work/development-kit
+	repo = /Users/imho/Work/development-kit/gitlab
+
+[url "git@gitlab.com:"]
+	insteadOf = https://gitlab.com/
+[diff]
+	algorithm = histogram
+[gpg]
+	pinentry-mode = loopback

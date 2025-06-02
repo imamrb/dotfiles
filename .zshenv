@@ -1,13 +1,16 @@
 skip_global_compinit=1  # Skip the not really helping Ubuntu global compinit
 
-PATH="$HOME/.rbenv/shims/:$HOME/.rbenv/bin:$PATH"
-PATH="~/.bin:/usr/local/sbin:$PATH"               # ensure dotfiles bin directory is loaded first
-PATH="/usr/local/mysql/bin:$PATH"         # Export mysql path
-# PATH="$HOME/.rbenv/versions/2.7.2/bin:$PATH"
-PATH="/usr/local/texlive/2022/bin/x86_64-linux:$PATH"
-# PATH="/opt/homebrew/opt/mysql/bin:$PATH"
+# Ensure dotfiles bin directory is loaded first
+PATH="$HOME/.bin:/usr/local/sbin:$PATH"
 PATH="$HOME/.local/share/bin:$PATH"
+# PATH="/usr/local/mysql/bin:$PATH"
+# PATH="/opt/homebrew/opt/mysql/bin:$PATH"
+PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+PATH="$HOME/.local/share/mise/shims:$PATH"
 export PATH
+
+# Avoid duplicate entries in PATH
+typeset -U PATH
 
 # mysql@5.7 is keg-only, which means it was not symlinked into /opt/homebrew,
 # because this is an alternate version of another formula.
@@ -24,14 +27,14 @@ export PATH
 
 
 # Rails bundler gem installation flags
-export optflags="-Wno-error=implicit-function-declaration"
-export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+# export optflags="-Wno-error=implicit-function-declaration"
+# export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 
-if [[ "$OSTYPE" =~ ^darwin ]]; then
-  export LDFLAGS="-L/opt/homebrew/opt/libffi/lib"
-  export CPPFLAGS="-I/opt/homebrew/opt/libffi/include"
-  export PKG_CONFIG_PATH="/opt/homebrew/opt/libffi/lib/pkgconfig"
-fi
+# if [[ "$OSTYPE" =~ ^darwin ]]; then
+#   export LDFLAGS="-L/opt/homebrew/opt/libffi/lib"
+#   export CPPFLAGS="-I/opt/homebrew/opt/libffi/include"
+#   export PKG_CONFIG_PATH="/opt/homebrew/opt/libffi/lib/pkgconfig"
+# fi
 
 export EDITOR=nvim
 export VISUAL="$EDITOR"
@@ -46,11 +49,14 @@ export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_AUTO_UPDATE=1 # Disable Homebrew Autoupdate, uses homebrew/autoupdate
 export HOMEBREW_CURLRC=1
 
-export LS_COLORS='rs=0:no=00:mi=00:mh=00:ln=01;36:or=01;31:di=01;34:ow=04;01;34:st=34:tw=04;34:pi=01;33:so=01;33:do=01;33:bd=01;33:cd=01;33:su=01;35:sg=01;35:ca=01;35:ex=01;32:'
+# export LS_COLORS='rs=0:no=00:mi=00:mh=00:ln=01;36:or=01;31:di=01;34:ow=04;01;34:st=34:tw=04;34:pi=01;33:so=01;33:do=01;33:bd=01;33:cd=01;33:su=01;35:sg=01;35:ca=01;35:ex=01;32:'
 
 # follow symbolic links and don't want it to exclude hidden files
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export JQ_ZSH_PLUGIN_EXPAND_ALIASES=0
+
+export ENABLE_SPRING=1
+
 # export RAILS_ENV=test
 
 # export DISABLE_SPRING=true

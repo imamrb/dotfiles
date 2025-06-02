@@ -12,7 +12,7 @@ shelltime() {
 alias reload="exec ${SHELL} -l"
 
 alias nano="nvim"
-alias cat="bat -pp"
+# alias cat="bat -pp"
 
 # CD
 alias ..="cd .."
@@ -36,9 +36,18 @@ alias jlo='j log --oneline'
 alias sz="source ~/.zshrc"
 
 
+# pretty path print
+function ppath() {
+  echo $PATH | tr ':' '\n'
+}
+
 # Create a new directory and enter it
 function mcd() {
   mkdir -p "$@" && cd "$@"
+}
+
+function mktouch() {
+  mkdir -p "$(dirname "$1")" && touch "$1"
 }
 
 # Shortcuts
@@ -64,7 +73,7 @@ function tcp() {
 
 # GNU
 
-alias ls='exa --icons'
+alias ls='eza --icons --group-directories-first'
 # alias cat='batcat'
 alias preview="fzf --preview 'bat --color \"always\" {}'"
 alias up='sudo apt update -y && sudo apt upgrade -y'
@@ -153,8 +162,8 @@ alias tkss='tmux kill-session -t'
 
 # Git
 
-alias gitpc='git config --global user.email imam.swe@gmail.com; git config --global user.name "Imam Hossain";'
-alias gitwc='git config --local user.email imam.hossain@welldev.io; git config --local user.name "Imam Hossain";'
+alias gitpc='git config --local user.email imam.swe@gmail.com; git config --local user.name "Imam Hossain";'
+alias gitwc='git config --local user.email ihossain@gitlab.com; git config --local user.name "Imam Hossain";'
 
 alias g='git'
 alias gs='git status'
@@ -290,7 +299,26 @@ gunskipall() {
 
 # Run rubocop only on staged files
 rbf() {
-  git diff --cached --name-only --diff-filter=ACM -z | xargs -0 ls -1 2>/dev/null | grep '\.rb$' | xargs bundle exec rubocop -A --force-exclusion "$@"
+  git diff --relative --name-only --diff-filter=ACM HEAD | xargs bundle e rubocop -A --format fuubar --force-exclusion "$@"
+}
+
+rbc() {
+  local curr_dir=$(pwd)
+  local rubocop_path='src/api/'
+
+  local files=$(git diff --relative --name-only --diff-filter=ACM HEAD | grep '\.rb$')
+  
+  if [[ -d $rubocop_path ]]; then
+    local escaped_path=$(echo $rubocop_path | sed 's/\//\\\//g')
+    files=$(echo "$files" | sed "s/$escaped_path//")
+    cd $rubocop_path
+  fi 
+  
+  echo -e "${Yellow}Files under inspection: \n\n${Cyan}$files\n${Green}"
+
+  echo "$files" | xargs bundle exec rubocop --force-exclusion "$@"
+
+  cd "$curr_dir" || return
 }
 
 # copy branch name - to clipboard

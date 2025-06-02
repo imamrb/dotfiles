@@ -1,6 +1,6 @@
 # Set starting directory
-if [[ $PWD == $HOME  && -d "$PWD/Projects" ]]; then
-    cd $PWD/Projects
+if [[ $PWD == $HOME  && -d "$PWD/Work" ]]; then
+  cd $PWD/Work
 fi
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -118,25 +118,7 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k
 # zinit ice svn
 # zinit snippet OMZ::plugins/tmux
 
-#compdef '_files -W "/System/Volumes/Data/Applications/*"' opena
-
-# Source aliases and functions
-source ~/.aliases
-
-
-# Load private environment variables if file exists
-if [[ -f "$HOME/.zshenv_private" ]]; then
-  source $HOME/.zshenv_private
-fi
-
-## these files can also be loaded using turbo mode
-## Requires zinit update <file> command to run after updating the file
-
-# zinit ice wait lucid
-# zinit snippet ~/.zsh_aliases
-# zinit ice wait lucid
-# zinit snippet ~/.zsh_functions
-
+# compdef '_files -W "/System/Volumes/Data/Applications/*"' opena
 
 # - - - - - - - - - - - - - - - - - - - -
 # Begin zinits Plugins
@@ -149,33 +131,43 @@ zinit wait lucid for \
             OMZP::extract \
             OMZP::jsontools\
             OMZP::docker-compose \
-        as"completion" \
-            OMZP::docker/_docker
+        # as"completion" \
+        #     OMZP::docker/_docker
 
 # Some utilities
-zinit wait lucid light-mode for \
+zinit wait"1" lucid light-mode for \
                djui/alias-tips \
-    	       b4b4r07/emoji-cli \
-               imamrb/jira.plugin.zsh 
+    	       b4b4r07/emoji-cli
+               # imamrb/jira.plugin.zsh
 
 # delta git pager
 # zinit ice wait lucid as"command" from"gh-r" mv"delta* -> delta" pick"delta/delta"
 # zinit light dandavison/delta
 
 # After automatic unpacking it provides program from github releases
-# as"null" – a shorthand for pick"/dev/null" nocompletions – 
+# as"null" – a shorthand for pick"/dev/null" nocompletions –
 # i.e.: it disables the default script-file sourcing and also the installation of completions.
 zinit wait"1" lucid from"gh-r" as"null" for \
      sbin"fzf"          junegunn/fzf \
      sbin"**/fd"        @sharkdp/fd \
      sbin"**/bat"       @sharkdp/bat \
      sbin"**/delta"     @dandavison/delta \
-     sbin"bin/exa"      @ogham/exa
-     # sbin"tldr"         @isacikgoz/tldr
+
+
+# git extensions
+zinit ice wait"1" lucid as"null"
+zinit light paulirish/git-open
+
 
 # diff so fancy
 zinit ice wait lucid sbin"bin/git-dsf"
 zinit light zdharma-continuum/zsh-diff-so-fancy
+
+zinit ice wait"1" lucid as"program" from"gitlab.com" \
+      mv"roulette.sh -> roulette" pick"roulette" \
+      atpull'!git reset --hard' \
+      atclone"./configure.sh"
+zinit light imam_h/gitlab-roulette
 
 ## ajaira
 # zinit wait lucid light-mode for \
@@ -224,35 +216,18 @@ zinit load zdharma-continuum/history-search-multi-word
 
 # ASDF
 
-zinit ice wait lucid fsrc"asdf.sh -> asdf"
-zinit light asdf-vm/asdf
+# zinit ice wait lucid fsrc"asdf.sh -> asdf"
+# zinit light asdf-vm/asdf
 
 # # NVM
 # zinit ice wait lucid
 # zinit light lukechilds/zsh-nvm
 
 # rbenv
-zinit ice wait lucid
-zinit light htlsne/zinit-rbenv
+# zinit ice wait lucid
+# zinit light htlsne/zinit-rbenv
 # or
 # eval "$(rbenv init - --no-rehash)"
-
-# git extensions
-zinit as"null" wait"1" lucid for \
-    sbin    Fakerr/git-recall \
-    sbin    cloneopts paulirish/git-open \
-    sbin    paulirish/git-recent \
-    sbin    davidosomething/git-my \
-    sbin atload"export _MENU_THEME=legacy" \
-            arzzen/git-quick-stats \
-    sbin    iwata/git-now \
-            bobthecow/git-flow-completion
-
-
-# Tab completions
-zinit ice wait lucid blockf atpull'zinit creinstall -q .'
-zinit light zsh-users/zsh-completions
-
 
 # compinit Imporoved
 # checking the cached .zcompdump file to see if it must be regenerated once a day.
@@ -279,13 +254,57 @@ _zicompinit_custom() {
 zinit ice wait lucid atinit'_zicompinit_custom; zicdreplay;'
 zinit light zdharma-continuum/fast-syntax-highlighting
 
+
+# mise
+zinit wait"2" lucid from="gh-r" as="command" for \
+    id-as="mise" mv="mise* -> mise" \
+    atclone="./mise* completion zsh > _mise" \
+    atpull="%atclone" \
+    atload='eval "$(mise activate zsh --shims)"' \
+    jdx/mise
+
+
+# zinit ice wait lucid gem'!pry'
+# zinit light zdharma-continuum/null
+
+# Tab completions
+zinit ice wait lucid blockf atpull'zinit creinstall -q .'
+zinit light zsh-users/zsh-completions
+
 # # direnv
 # eval "$(direnv hook zsh)"
 
 # eval "$(rbenv init -)"
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# eval "$(mise activate zsh --shims)"
+# eval "$(mise activate zsh)"
+
+# Source aliases and functions
+source ~/.aliases
+
+# Load private environment variables if file exists
+if [[ -f "$HOME/.zshenv_private" ]]; then
+  source $HOME/.zshenv_private
+fi
+
+# Ensure dotfiles bin directory is loaded first
+
+# Ensure dotfiles bin directory is loaded first
+PATH="$HOME/.bin:/usr/local/sbin:$PATH"
+PATH="$HOME/.local/share/bin:$PATH"
+PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+PATH="$HOME/.local/share/mise/shims:$PATH"
+export PATH
+
+## these files can also be loaded using turbo mode
+## Requires zinit update <file> command to run after updating the file
+
+# zinit ice wait lucid
+# zinit snippet ~/.zsh_aliases
+# zinit ice wait lucid
+# zinit snippet ~/.zsh_functions
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
