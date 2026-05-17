@@ -262,6 +262,8 @@ export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_CTRL_T_OPTS="--preview 'bat --color=always --line-range :50 {}'"
+# Rebind fzf file picker from C-t (used by tmux) to C-f
+bindkey '^F' fzf-file-widget
 
 # Source aliases and functions
 source ~/.aliases
