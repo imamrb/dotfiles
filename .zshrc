@@ -194,6 +194,9 @@ zinit wait lucid light-mode for \
 		  	   andrewferrier/fzf-z \
                Aloxaf/fzf-tab
 
+ZVM_INIT_MODE=sourcing
+ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT  # start in insert mode (normal shell behavior)
+ZVM_VI_INSERT_ESCAPE_BINDKEY=jk      # jk to escape to normal mode
 zinit ice depth=1
 zinit light jeffreytse/zsh-vi-mode
 
