@@ -293,8 +293,8 @@ alias gstsp='git stash save --patch'
 alias gitsh='git stash show'
 alias gstsht='git stash show --text'
 alias gstshs='git stash show --stat'
-alias gli="/Users/imho/Work/scripts/gitlab-issue.rb $@"
-alias glp="/Users/imho/Work/scripts/projects/create_project.rb $@"
+alias gli="$HOME/Work/scripts/gitlab-issue.rb $@"
+alias glp="$HOME/Work/scripts/projects/create_project.rb $@"
 alias glim='gli --mr'
 
 ## sgpt commit
