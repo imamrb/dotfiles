@@ -1,0 +1,46 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "share": "disabled",
+  "small_model": "gitlab/duo-chat-haiku-4-5",
+  "enabled_providers": [
+    "gitlab",
+    "anthropic",
+    "google"
+  ],
+  "server": {
+    "hostname": "127.0.0.1",
+    "mdns": false
+  },
+  "plugin": [
+    "@franlol/opencode-md-table-formatter@0.0.3",
+    "@tarquinen/opencode-dcp@latest",
+    "oh-my-opencode@3.14",
+    "opentmux"
+  ],
+  "default_agent": "sisyphus",
+  "model": "gitlab/duo-chat-sonnet-4-6",
+  "permission": {
+    "bash": {
+      "*": "allow",
+      "rm -rf *": "deny",
+      "glab *": "allow",
+      "python3 *": "allow"
+    },
+    "edit": {
+      "*": "allow",
+      ".env": "deny",
+      ".env.*": "deny",
+      "config/secrets.yml": "deny",
+      "config/credentials.yml.enc": "deny",
+      "config/master.key": "deny"
+    },
+    "read": {
+      "*": "allow",
+      "~/.aws/*": "deny",
+      "~/.ssh/*": "deny",
+      "~/.gnupg/*": "deny",
+      "~/.netrc": "deny",
+      "~/.config/opencode/*": "deny"
+    }
+  }
+}

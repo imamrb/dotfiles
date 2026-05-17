@@ -16,10 +16,31 @@ rescue LoadError => e
   puts 'awesome_print gem not found!'
 end
 
+def load_helpers
+  helpers_path = Rails.root.join('.bundle/pry_helpers')
+  return unless Dir.exist?(helpers_path)
+
+  Dir[helpers_path.join('**/*.rb')].sort.each do |file|
+    puts "🔄 Loading: #{file}"
+    load file
+  end
+
+  puts "✅ Pry helpers loaded."
+rescue LoadError, StandardError => e
+  puts "❌ Load error: #{e.class} - #{e.message}"
+end
+
+load_helpers if defined?(Rails)
+
+
 class Object
   def local_methods(obj = self) # list methods which aren't in superclass
     (obj.methods - obj.class.superclass.instance_methods).sort
   end
+end
+
+def logger
+  ActiveRecord::Base.logger = Logger.new(STDOUT)
 end
 
 
@@ -141,6 +162,49 @@ end
 
 # Utils
 
+def copy_class_vscode
+  file = `osascript <<EOF
+  tell application "System Events"
+    set frontApp to name of first process whose frontmost is true
+  end tell
+
+  if frontApp is "Visual Studio Code" then
+    tell application "Visual Studio Code"
+      try
+        set filePath to path of active document of front window
+        return filePath
+      on error
+        return ""
+      end try
+    end tell
+  end if
+EOF
+  `.strip
+
+  unless file && File.exist?(file)
+    puts "❌ No open file detected from VSCode or file does not exist"
+    return
+  end
+
+  stack = []
+  File.readlines(file).each do |line|
+    case line
+    when /^\s*(module|class)\s+([\w:]+)/
+      stack << $2
+    when /^\s*end\b/
+      stack.pop
+    end
+  end
+
+  if stack.any?
+    full_name = stack.join('::')
+    puts "📋 Copied: #{full_name}"
+    IO.popen('pbcopy', 'w') { |f| f << full_name } rescue puts "(Couldn't copy to clipboard)"
+  else
+    puts "⚠️ No class/module found in #{file}"
+  end
+end
+
 def world_clock
   ActiveSupport::TimeZone.all.map(&:name).map do |zone|
     zone + ' : ' + Time.now.in_time_zone(zone).strftime('%F %T %:z')
@@ -151,6 +215,12 @@ def benchmark(repetitions = 100, &block)
   require 'benchmark'
   Benchmark.bm { |b| b.report { repetitions.times(&block) } }
 end
+
+def explain(sql)
+  result = ActiveRecord::Base.connection.execute("EXPLAIN #{sql}")
+  result.each { |row| puts row.values.join(" | ") }
+end
+
 
 Pry.config.prompt = Pry::NAV_PROMPT unless defined?(Pry::Prompt)
 

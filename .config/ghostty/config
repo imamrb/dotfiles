@@ -1,0 +1,13 @@
+# cmux / Ghostty terminal config
+# Matches iTerm2 profile: Hack Nerd Font 14, dark theme
+
+font-family = Hack Nerd Font
+font-size = 14
+
+# Colors matched from iTerm2 profile
+background = #212121
+foreground = #F8F8F2
+cursor-color = #EDF0F4
+
+# Scrollback
+scrollback-limit = 50000000

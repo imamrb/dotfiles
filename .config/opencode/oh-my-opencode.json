@@ -1,0 +1,107 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
+  "agents": {
+    "sisyphus": {
+      "model": "gitlab/duo-chat-sonnet-4-6",
+      // Orchestrator — Sonnet 4.6 is the sweet spot
+      "temperature": 0.5
+    },
+    "librarian": {
+      // GPT-5.2: best for web/doc search, confirmed working
+      "model": "gitlab/duo-chat-gpt-5-2"
+    },
+    "explore": {
+      // Haiku 4.5: just grep work, cheapest possible
+      "model": "gitlab/duo-chat-haiku-4-5"
+    },
+    "oracle": {
+      // Opus 4.7: latest, hardest reasoning, 1M context
+      "model": "gitlab/duo-chat-opus-4-7"
+    },
+    "frontend-ui-ux-engineer": {
+      // Opus 4.7: upgraded from 4.5
+      "model": "gitlab/duo-chat-opus-4-7"
+    },
+    "document-writer": {
+      // Sonnet 4.6: long docs
+      "model": "gitlab/duo-chat-sonnet-4-6"
+    },
+    "multimodal-looker": {
+      // Haiku 4.5: vision tasks are simple
+      "model": "gitlab/duo-chat-haiku-4-5"
+    },
+    "prometheus": {
+      // Sonnet 4.6: planning quality without Opus cost
+      "model": "gitlab/duo-chat-sonnet-4-6"
+    },
+    "metis": {
+      // Opus 4.7: pre-planning analysis, upgraded from 4.5
+      "model": "gitlab/duo-chat-opus-4-7"
+    },
+    "momus": {
+      // Sonnet 4.6: plan critique
+      "model": "gitlab/duo-chat-sonnet-4-6"
+    },
+    "atlas": {
+      // Sonnet 4.6: upgraded from 4.5
+      "model": "gitlab/duo-chat-sonnet-4-6"
+    },
+    "hephaestus": {
+      // Sonnet 4.6: upgraded from 4.5
+      "model": "gitlab/duo-chat-sonnet-4-6"
+    }
+  },
+  "tmux": {
+    "enabled": true,
+    "layout": "main-vertical"
+  },
+  "background_task": {
+    // Cap both Opus versions — parallel agents can spike cost fast
+    "modelConcurrency": {
+      "gitlab/duo-chat-opus-4-6": 2,
+      "gitlab/duo-chat-opus-4-7": 2
+    }
+  },
+  "categories": {
+    "visual-engineering": {
+      // Opus 4.7: upgraded from 4.5
+      "model": "gitlab/duo-chat-opus-4-7"
+    },
+    "ultrabrain": {
+      // Opus 4.7: hardest tasks, latest and greatest
+      "model": "gitlab/duo-chat-opus-4-7"
+    },
+    "artistry": {
+      // Opus 4.7: upgraded from 4.5
+      "model": "gitlab/duo-chat-opus-4-7"
+    },
+    "quick": {
+      // Haiku 4.5: trivial tasks, minimum cost
+      "model": "gitlab/duo-chat-haiku-4-5"
+    },
+    "unspecified-low": {
+      "model": "gitlab/duo-chat-haiku-4-5"
+    },
+    "unspecified-high": {
+      "model": "gitlab/duo-chat-sonnet-4-6"
+    },
+    "writing": {
+      // GPT-5-mini: confirmed valid ID, cheap for writing tasks
+      "model": "gitlab/duo-chat-gpt-5-mini"
+    },
+    "deep": {
+      // Sonnet 4.6: deep research
+      "model": "gitlab/duo-chat-sonnet-4-6"
+    }
+  },
+  "git_master": {
+    "commit_footer": false,
+    "include_co_authored_by": false
+  },
+  "experimental": {
+    "truncate_all_tool_outputs": true,
+    "dynamic_context_pruning": {
+      "enabled": true
+    }
+  }
+}

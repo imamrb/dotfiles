@@ -1,16 +1,17 @@
 skip_global_compinit=1  # Skip the not really helping Ubuntu global compinit
 
 # Ensure dotfiles bin directory is loaded first
-PATH="$HOME/.bin:/usr/local/sbin:$PATH"
-PATH="$HOME/.local/share/bin:$PATH"
-# PATH="/usr/local/mysql/bin:$PATH"
-# PATH="/opt/homebrew/opt/mysql/bin:$PATH"
-PATH="/opt/homebrew/opt/ruby/bin:$PATH"
-PATH="$HOME/.local/share/mise/shims:$PATH"
-export PATH
+# PATH="$HOME/.bin:/usr/local/sbin:$PATH"
+# PATH="$HOME/.local/share/bin:$PATH"
+# # PATH="/usr/local/mysql/bin:$PATH"
+# # PATH="/opt/homebrew/opt/mysql/bin:$PATH"
+# PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+# PATH="$HOME/.local/share/mise/shims:$PATH"
+# export PATH
 
-# Avoid duplicate entries in PATH
-typeset -U PATH
+
+# # Avoid duplicate entries in PATH
+# typeset -U PATH
 
 # mysql@5.7 is keg-only, which means it was not symlinked into /opt/homebrew,
 # because this is an alternate version of another formula.
@@ -45,7 +46,7 @@ export ZSH_TMUX_AUTOSTART=false
 export ZSH_TMUX_AUTOSTART_ONCE=false
 export ZSH_TMUX_AUTOCONNECT=false
 
-export HOMEBREW_NO_ANALYTICS=1     
+export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_AUTO_UPDATE=1 # Disable Homebrew Autoupdate, uses homebrew/autoupdate
 export HOMEBREW_CURLRC=1
 
@@ -61,7 +62,7 @@ export ENABLE_SPRING=1
 
 # export DISABLE_SPRING=true
 
-## .zshenv_private variables 
+## .zshenv_private variables
 
 # TOKEN=''
 # USERNAME=''
