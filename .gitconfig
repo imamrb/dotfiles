@@ -6,14 +6,6 @@
 [commit]
 	gpgsign = true
 
-path = ~/.gitconfig-work
-
-[includeIf "gitdir:~/Work/"]
-  path = ~/.gitconfig-work
-
-[includeIf "gitdir:~/Private/"]
-  path = ~/.gitconfig-personal
-
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
@@ -27,6 +19,10 @@ path = ~/.gitconfig-work
 	excludesFile = /Users/imho/.gitignore
 	pager = diff-so-fancy | less --tabs=2 -FXRi
 	autocrlf = input
+	untrackedCache = true
+	commitGraph = true
+	multiPackIndex = true
+	fsmonitor = true
 	# fsmonitor = true
 	# pager = delta --line-numbers
 
@@ -57,16 +53,22 @@ path = ~/.gitconfig-work
 
 [open "https://ssh.github.com"]
 	domain = github.com
-
-[maintenance]
-	repo = /Users/imho/Work/gdk/gitlab
-	repo = /Users/imho/Work/gdk
-	repo = /Users/imho/Work/development-kit
-	repo = /Users/imho/Work/development-kit/gitlab
-
 [url "git@gitlab.com:"]
 	insteadOf = https://gitlab.com/
 [diff]
 	algorithm = histogram
 [gpg]
 	pinentry-mode = loopback
+[maintenance]
+	repo = /Users/imho/Work/gdk/gitlab
+	repo = /Users/imho/Work/gdk
+	auto = true
+[gc]
+	writeCommitGraph = true
+[fetch]
+	writeCommitGraph = true
+	unpackLimit = 1
+[repack]
+	writeBitmaps = true
+[index]
+	threads = 0

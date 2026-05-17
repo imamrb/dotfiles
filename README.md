@@ -25,17 +25,18 @@ Setup scripts for mac: [/Documents/MacSetup](Documents/MacSetup)
 - Checkout the actual content from your .dotfiles repository to $HOME
 
 ```bash
-
-
    git clone --bare git@github.com:imamrb/dotfiles.git $HOME/.dotfiles
 
    alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-   dotfiles config --local status.showUntrackedFiles no
+
+   # Backup existing files and checkout dotfiles
    mkdir -p .dotfiles-backup && \
    dotfiles checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | \
    xargs -I{} mv {} .dotfiles-backup/{}
    dotfiles checkout
 
+   # Apply repo performance settings (fsmonitor, excludes, etc.)
+   git config --file ~/.dotfiles/config include.path ~/.dotfiles_repo_config
 ```
 
 For Details Explanation of these commands, checkout this blog [here](https://www.ackama.com/blog/posts/the-best-way-to-store-your-dotfiles-a-bare-git-repository-explained).

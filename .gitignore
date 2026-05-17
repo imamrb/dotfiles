@@ -1,0 +1,21 @@
+# Global gitignore — applies to ALL repos
+# Keep only patterns that should NEVER appear in any project
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Crash dumps
+*.hprof
+
+# Editor
+.idea/
+*.swp
+*.swo
+*~
+
+# Misc
+gkg-http-server

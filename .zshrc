@@ -1,6 +1,6 @@
 # Set starting directory
 if [[ $PWD == $HOME  && -d "$PWD/Work" ]]; then
-  cd $PWD/Work
+  cd $PWD/Work/gdk/gitlab
 fi
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -57,7 +57,7 @@ function zsh_directory_name() {
   [[ $1 == d ]] || return
   while [[ $2 != / ]]; do
     if [[ -e $2/.git ]]; then
-      typeset -ga reply=(${2:t} $#2)
+      typeset -ga reply=(${2:h:t}/${2:t} $#2)
       return
     fi
     2=${2:h}
@@ -183,15 +183,19 @@ zinit light imam_h/gitlab-roulette
 
 ## needs: zinit, fzf
 
-# z
-zinit ice wait blockf lucid
-zinit light rupa/z
+# zoxide (replaces z)
+zinit ice wait lucid from"gh-r" as"command" mv"zoxide* -> zoxide" \
+    atclone"./zoxide init zsh > init.zsh" atpull"%atclone" src"init.zsh" nocompile'!'
+zinit light ajeetdsouza/zoxide
 
 # tab completion
 zinit wait lucid light-mode for \
 		  	   changyuheng/fz \
 		  	   andrewferrier/fzf-z \
                Aloxaf/fzf-tab
+
+zinit ice depth=1
+zinit light jeffreytse/zsh-vi-mode
 
 # Don't bind these keys until ready
 bindkey -r '^[[A' # Arrow Up, `cat -v` for checking
@@ -214,20 +218,6 @@ zinit light zsh-users/zsh-autosuggestions
 zinit ice wait lucid
 zinit load zdharma-continuum/history-search-multi-word
 
-# ASDF
-
-# zinit ice wait lucid fsrc"asdf.sh -> asdf"
-# zinit light asdf-vm/asdf
-
-# # NVM
-# zinit ice wait lucid
-# zinit light lukechilds/zsh-nvm
-
-# rbenv
-# zinit ice wait lucid
-# zinit light htlsne/zinit-rbenv
-# or
-# eval "$(rbenv init - --no-rehash)"
 
 # compinit Imporoved
 # checking the cached .zcompdump file to see if it must be regenerated once a day.
@@ -254,30 +244,21 @@ _zicompinit_custom() {
 zinit ice wait lucid atinit'_zicompinit_custom; zicdreplay;'
 zinit light zdharma-continuum/fast-syntax-highlighting
 
-
-# mise
-zinit wait"2" lucid from="gh-r" as="command" for \
-    id-as="mise" mv="mise* -> mise" \
-    atclone="./mise* completion zsh > _mise" \
-    atpull="%atclone" \
-    atload='eval "$(mise activate zsh --shims)"' \
-    jdx/mise
-
-
-# zinit ice wait lucid gem'!pry'
-# zinit light zdharma-continuum/null
-
 # Tab completions
 zinit ice wait lucid blockf atpull'zinit creinstall -q .'
 zinit light zsh-users/zsh-completions
 
-# # direnv
-# eval "$(direnv hook zsh)"
 
-# eval "$(rbenv init -)"
+# bat
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANROFFOPT="-c"
+alias cat="bat --paging=never"
 
-# eval "$(mise activate zsh --shims)"
-# eval "$(mise activate zsh)"
+# fzf — use fd + bat preview
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="--preview 'bat --color=always --line-range :50 {}'"
 
 # Source aliases and functions
 source ~/.aliases
@@ -287,14 +268,43 @@ if [[ -f "$HOME/.zshenv_private" ]]; then
   source $HOME/.zshenv_private
 fi
 
-# Ensure dotfiles bin directory is loaded first
 
-# Ensure dotfiles bin directory is loaded first
-PATH="$HOME/.bin:/usr/local/sbin:$PATH"
-PATH="$HOME/.local/share/bin:$PATH"
-PATH="/opt/homebrew/opt/ruby/bin:$PATH"
-PATH="$HOME/.local/share/mise/shims:$PATH"
-export PATH
+# zinit ice wait lucid gem'!pry'
+# zinit light zdharma-continuum/null
+
+
+# # mise
+# zinit wait"2" lucid from="gh-r" as="command" for \
+#     id-as="mise" mv="mise* -> mise" \
+#     atclone="./mise* completion zsh > _mise" \
+#     atpull="%atclone" \
+#     atload='eval "$(mise activate zsh --shims)"' \
+#     jdx/mise
+
+
+# ASDF
+
+# zinit ice wait lucid fsrc"asdf.sh -> asdf"
+# zinit light asdf-vm/asdf
+
+# # NVM
+# zinit ice wait lucid
+# zinit light lukechilds/zsh-nvm
+
+# rbenv
+# zinit ice wait lucid
+# zinit light htlsne/zinit-rbenv
+# or
+# eval "$(rbenv init - --no-rehash)"
+
+# # direnv
+# eval "$(direnv hook zsh)"
+
+# eval "$(rbenv init -)"
+
+# eval "$(mise activate zsh --shims)"
+# eval "$(mise activate zsh)"
+
 
 ## these files can also be loaded using turbo mode
 ## Requires zinit update <file> command to run after updating the file
@@ -304,7 +314,34 @@ export PATH
 # zinit ice wait lucid
 # zinit snippet ~/.zsh_functions
 
+# eval "$(mise activate zsh --shims)"
+# eval "$(mise activate zsh)"
+
+# PATH="$HOME/.local/share/mise/shims:$PATH"
+# export PATH
+
+
+PATH="/usr/local/sbin:$PATH"
+PATH="$HOME/.bin:$PATH"
+PATH="$HOME/.local/share/bin:$PATH"
+PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+PATH="$HOME/.local/share/mise/shims:$PATH"
+PATH="$HOME/.local/bin:$PATH"
+export PATH
+
+eval "$(mise activate zsh)"
+
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# >>> opentmux >>>
+export OPENCODE_PORT=4096
+alias opencode='opentmux'
+# <<< opentmux <<<
+
+# >>> opencode-agent-tmux >>>
+export OPENCODE_PORT=4096
+alias opencode='opencode-tmux'
+# <<< opencode-agent-tmux <<<

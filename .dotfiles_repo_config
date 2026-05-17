@@ -1,0 +1,8 @@
+# Dotfiles bare repo performance settings
+# Applied via: git config --file ~/.dotfiles/config include.path ~/.dotfiles_repo_config
+[core]
+	fsmonitor = false
+	untrackedCache = true
+	excludesFile = ~/.dotfiles_ignore
+[status]
+	showUntrackedFiles = no

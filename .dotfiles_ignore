@@ -1,0 +1,61 @@
+# Dotfiles bare repo — exclude heavy directories from $HOME scanning
+
+# Large work directories
+Work/
+Documents/
+Downloads/
+Desktop/
+Movies/
+Music/
+Pictures/
+Library/
+Applications/
+Public/
+
+# Other large/irrelevant dirs
+JoplinBackup/
+OrbStack/
+Private/
+go/
+pry_scripts/
+
+# Large files
+*.hprof
+*.log
+*.png
+*.jpg
+*.jpeg
+
+# Dev artifacts
+node_modules/
+.cache/
+.npm/
+.yarn/
+.bundle/
+.gem/
+vendor/
+
+# Tool caches
+.zinit/
+.local/
+.asdf/
+.rbenv/
+.pyenv/
+.cargo/
+.rustup/
+.gradle/
+.m2/
+
+# macOS
+.DS_Store
+.Trash/
+.Spotlight-V100/
+
+# Misc
+.zsh_history
+.zcompdump*
+.zcompcache/
+.lesshst
+.wget-hsts
+.viminfo
+gkg-http-server

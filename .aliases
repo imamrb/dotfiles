@@ -32,6 +32,14 @@ alias jst='j status'
 alias jat='j add -u'        # Stage all updates of tracked files
 alias jlo='j log --oneline'
 
+## GDK
+alias rw="rails-web"
+alias rj="rails-background-jobs"
+alias gdks="gdk status $@"
+alias gdkt="gdk tail $@"
+alias gdkk="gdk kill -y && gdk start"
+alias gdkr="gdk restart"
+alias gdkrl="gdk restart rails-web && gdk restart rails-background-jobs"
 
 alias sz="source ~/.zshrc"
 
@@ -74,7 +82,7 @@ function tcp() {
 # GNU
 
 alias ls='eza --icons --group-directories-first'
-# alias cat='batcat'
+alias cat='bat'
 alias preview="fzf --preview 'bat --color \"always\" {}'"
 alias up='sudo apt update -y && sudo apt upgrade -y'
 
@@ -106,15 +114,15 @@ function rs() {
 
   if [ -f $PID ]; then
     echo -e "\e[1;31mStopping Running Process... \e[0m"
-    
+
     [ -s $PID ] && kill -9 $(cat $PID)
-    
-    rm ./tmp/pids/server.pid &> /dev/null 
+
+    rm ./tmp/pids/server.pid &> /dev/null
   fi
 
   if ! [ -z "$(lsof -wni tcp:$port)" ]; then
     echo -e "\e[1;31mStopping Running Process... \e[0m"
-    
+
     fuser -k -n tcp $port &> /dev/null
   fi
 
@@ -285,6 +293,30 @@ alias gstsp='git stash save --patch'
 alias gitsh='git stash show'
 alias gstsht='git stash show --text'
 alias gstshs='git stash show --stat'
+alias gli="/Users/imho/Work/scripts/gitlab-issue.rb $@"
+alias glp="/Users/imho/Work/scripts/projects/create_project.rb $@"
+alias glim='gli --mr'
+
+## sgpt commit
+
+sgptcommit() {
+  message=$(git diff --cached | sgpt "Write a concise Git commit message in less than 72 chars and
+   a short description explaining what the change does and why it matters. Format like:<commit message>\n<description>
+   Limit each line maximum of 72 chars without whitespace or new line in beggining. The commit body should not contain more than 72 characters per line")
+
+  title=$(echo "$message" | head -2 | xargs)
+  body=$(echo "$message" | tail -n +3 | sed '/^\s*$/d')
+
+  echo "title: |$title|\n"
+  echo "body: |$body|\n"
+
+  # Use git commit with title and body
+  git commit --edit -m "$title" -m "$body" "$@"
+
+  # Show the last commit log
+  git log -1
+}
+
 
 # checks for any files flagged w/ --skip-worktree alias
 alias gskipls="git ls-files -v|grep '^S'"
@@ -307,13 +339,13 @@ rbc() {
   local rubocop_path='src/api/'
 
   local files=$(git diff --relative --name-only --diff-filter=ACM HEAD | grep '\.rb$')
-  
+
   if [[ -d $rubocop_path ]]; then
     local escaped_path=$(echo $rubocop_path | sed 's/\//\\\//g')
     files=$(echo "$files" | sed "s/$escaped_path//")
     cd $rubocop_path
-  fi 
-  
+  fi
+
   echo -e "${Yellow}Files under inspection: \n\n${Cyan}$files\n${Green}"
 
   echo "$files" | xargs bundle exec rubocop --force-exclusion "$@"
@@ -361,12 +393,49 @@ glog() {
         --bind "alt-y:execute:$_gitLogLineToHash | xclip"
 }
 
-# usage: 
+# usage:
 # gsync develop # will rebase with develop
 # gsync develop merge # will merge with develop
 gsync() {
-  git checkout $1 && git pull && git checkout - && git "${2:-rebase}" $1
+  local branch="main" strategy="rebase" do_migrate="no"
+
+  if [[ $# -gt 0 && ! "$1" =~ ^-- ]]; then
+    branch="$1"; shift
+  fi
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --rebase) strategy="rebase" ;;
+      --merge) strategy="merge" ;;
+      --migrate) do_migrate="yes" ;;
+      --help)
+        echo "Usage: gsync [branch] [--rebase|--merge] [--migrate] [--help]"
+        echo "Defaults: branch=main, strategy=rebase, migrate=no"
+        return 0
+        ;;
+      *)
+        echo "Unknown option: $1"
+        return 1
+        ;;
+    esac
+    shift
+  done
+
+  echo "🌿 Branch: $branch | ⚙️ Strategy: $strategy | 🔄 Migrate: $do_migrate"
+
+  git checkout "$branch" && git pull && git checkout - && git "$strategy" "$branch"
+
+  if [[ $do_migrate == "yes" && -x "bin/rails" ]]; then
+    echo "🚀 Running migrations..."
+    bin/rails db:migrate
+  fi
+
+  if [[ -f db/structure.sql ]]; then
+    echo "🧳 Discarding local changes in db/structure.sql.."
+    git checkout -- db/structure.sql
+  fi
 }
+
 
 # Sync all projects with remote in the current directory
 pullall() {
@@ -397,6 +466,53 @@ pullall() {
   echo "\n\e[32mComplete!\e[0m\n"
 }
 
+rspec-diff() {
+  local diff_args=()
+  local dry_run=false
+
+  for arg in "$@"; do
+    case "$arg" in
+      --dry-run) dry_run=true ;;
+      *) diff_args+=("$arg") ;;
+    esac
+  done
+
+  local files
+  files=$(git diff "${diff_args[@]}" -U0 -- '*_spec.rb' |
+    awk '
+      /^\+\+\+ b\// { file = substr($0, 7); next }
+      /^@@/ {
+        split($0, a, "+"); split(a[2], b, " "); split(b[1], r, ",")
+        start = r[1]; len = (r[2]?r[2]:1); end = start + len - 1
+
+        if (!(file in min)) { min[file]=start; max[file]=end }
+        else {
+          if (start < min[file]) min[file]=start
+          if (end > max[file])   max[file]=end
+        }
+      }
+      END {
+        for (f in min)
+          print f ":" min[f] ":" max[f]  # output only to stdout
+      }
+    ' |
+    sort -u
+  )
+
+  if [ -z "$files" ]; then
+    [ "$dry_run" = true ] && echo "Dry-run: no spec changes detected" >&2
+    return
+  fi
+
+  if [ "$dry_run" = true ]; then
+    echo "Dry-run mode: changed spec files would be:" >&2
+    echo "$files"
+    return
+  fi
+
+  # Only output the file list to stdout for piping
+  echo "$files"
+}
 
 # Utilities
 
@@ -404,6 +520,17 @@ pullall() {
 alias dig="dig +nocmd any +multiline +noall +answer"
 alias ip="dig +short o-o.myaddr.l.google.com @ns1.google.com"
 alias localIp="ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'"
+
+# Loop helper function
+function repeat() {
+  local times=$1   # number of times to repeat
+  shift            # shift arguments so $@ now contains the command/block
+  for i in $(seq 1 $times); do
+    echo "========== Run #$i =========="
+    "$@"
+    echo ""
+  done
+}
 
 # find all files with a given extension
 function findf() {
@@ -483,3 +610,63 @@ function gify() {
   echo "Time taken: $runtime seconds"
 }
 
+function gitwk() {
+  local wk_cmd="$1"
+  local branch="$2"
+  [[ -z "$wk_cmd" || -z "$branch" ]] && { echo "Usage: gitwk add|remove <branch>"; return 1; }
+
+  # --- Short directory name from branch ---
+  local dir=$(echo "$branch" | awk -F '[-/]' '{print $1 "_" $2}')
+
+  # --- Repo root ---
+  local repo_root
+  repo_root="$(git rev-parse --show-toplevel 2>/dev/null)" || { echo "❌ Not in a git repository"; return 1; }
+  local wk_path="../worktrees/$dir"
+
+  case "$wk_cmd" in
+    add)
+      mkdir -p "$repo_root/worktrees"
+
+      if [ -d "$wk_path" ]; then
+        echo "🔄 Switching to existing worktree $wk_path"
+      else
+        echo "🌿 Adding worktree for $branch at $wk_path"
+
+        # Ensure branch exists locally, create if not
+        if ! git show-ref --verify --quiet "refs/heads/$branch"; then
+          echo "🌱 Branch $branch not found locally. Creating..."
+          git branch "$branch" || { echo "❌ Failed to create branch $branch"; return 1; }
+        fi
+
+        git worktree add "$wk_path" "$branch" || { echo "❌ Failed to add worktree"; return 1; }
+
+        # --- Copy top-level hidden files and .config ---
+        echo "📋 Copying top-level hidden files and .config..."
+        cd "$repo_root" || return 1
+        if command -v fd >/dev/null 2>&1; then
+          fd --hidden --no-ignore-vcs --max-depth 1 --exclude .git -t f -x cp {} "$wk_path"
+        else
+          find . -maxdepth 1 -type f -name ".*" ! -name ".git" -exec cp {} "$wk_path" \;
+        fi
+        [ -d ./config ] && cp -r ./config "$wk_path"
+      fi
+
+      mise trust "$wk_path/mise.toml"
+      cd $wk_path
+
+      echo "✅ Path: $PWD"
+      ;;
+    remove)
+      if [ -d "$wk_path" ]; then
+        echo "🗑️  Removing worktree $wk_path"
+        git worktree remove "$wk_path" || { echo "❌ Failed to remove worktree"; return 1; }
+        rm -rf "$wk_path"   # optional cleanup
+      else
+        echo "⚠️  No worktree for branch $branch"
+      fi
+      ;;
+    *)
+      echo "❓ Unknown command $wk_cmd. Use add|remove."
+      ;;
+  esac
+}
