@@ -15,7 +15,9 @@
     "@franlol/opencode-md-table-formatter@0.0.3",
     "@tarquinen/opencode-dcp@latest",
     "oh-my-opencode@3.14",
-    "opentmux"
+    "opentmux",
+    "/Users/imho/.local/share/opencode-memory-install/plugin",
+    "opencode-agent-tmux"
   ],
   "default_agent": "sisyphus",
   "model": "gitlab/duo-chat-sonnet-4-6",
@@ -41,6 +43,12 @@
       "~/.gnupg/*": "deny",
       "~/.netrc": "deny",
       "~/.config/opencode/*": "deny"
+    }
+  },
+  "mcp": {
+    "memory": {
+      "type": "remote",
+      "url": "http://localhost:9824/mcp"
     }
   }
 }
