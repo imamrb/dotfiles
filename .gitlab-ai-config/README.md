@@ -19,10 +19,10 @@ the same opencode config and agent instructions.
 ## Current links
 
 ```
-~/Work/gdk/gitlab/opencode.json          → ~/.gitlab-ai-config/opencode.json
-~/Work/gdk/gitlab/AGENTS.local.md        → ~/.gitlab-ai-config/AGENTS.local.md
-~/Work/gdk-secondary/gitlab/opencode.json     → ~/.gitlab-ai-config/opencode.json
-~/Work/gdk-secondary/gitlab/AGENTS.local.md   → ~/.gitlab-ai-config/AGENTS.local.md
+~/Work/gdk/gitlab/opencode.json        → ~/.gitlab-ai-config/opencode.json
+~/Work/gdk/gitlab/AGENTS.local.md      → ~/.gitlab-ai-config/AGENTS.local.md
+~/Work/gdk-secondary/gitlab/opencode.json   → ~/.gitlab-ai-config/opencode.json
+~/Work/gdk-secondary/gitlab/AGENTS.local.md → ~/.gitlab-ai-config/AGENTS.local.md
 ```
 
 ## Linking to a new GDK instance
