@@ -80,10 +80,9 @@ These are picked up automatically by `includeIf` in the shared `.gitconfig`:
    dotfiles checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | \
    xargs -I{} mv {} .dotfiles-backup/{}
    dotfiles checkout
-
-   # Apply repo performance settings (fsmonitor, excludes, etc.)
-   git config --file ~/.dotfiles/config include.path ~/.dotfiles_repo_config
 ```
+
+> Note: repo-specific settings (fsmonitor, excludes, showUntrackedFiles) are auto-applied via `includeIf` in `.gitconfig`.
 
 For Details Explanation of these commands, checkout this blog [here](https://www.ackama.com/blog/posts/the-best-way-to-store-your-dotfiles-a-bare-git-repository-explained).
 
