@@ -130,7 +130,7 @@ zinit wait lucid for \
             OMZP::colored-man-pages \
             OMZP::extract \
             OMZP::jsontools\
-            OMZP::docker-compose \
+            # OMZP::docker-compose \
         # as"completion" \
         #     OMZP::docker/_docker
 
@@ -145,17 +145,36 @@ zinit wait"1" lucid light-mode for \
 # zinit light dandavison/delta
 
 # After automatic unpacking it provides program from github releases
-# as"null" – a shorthand for pick"/dev/null" nocompletions –
-# i.e.: it disables the default script-file sourcing and also the installation of completions.
-zinit wait"1" lucid from"gh-r" as"null" for \
-     sbin"fzf"          junegunn/fzf \
-     sbin"**/fd"        @sharkdp/fd \
-     sbin"**/bat"       @sharkdp/bat \
-     sbin"**/delta"     @dandavison/delta \
+# Each tool gets its own atclone to hoist nested completion files
+zinit ice wait"1" lucid from"gh-r" as"null" sbin"fzf"
+zinit light junegunn/fzf
 
+zinit ice wait"1" lucid from"gh-r" as"null" sbin"**/fd" \
+    atclone'ln -sf */autocomplete/_fd _fd' atpull'%atclone' completions
+zinit light sharkdp/fd
+
+zinit ice wait"1" lucid from"gh-r" as"null" sbin"**/bat" \
+    atclone'ln -sf $PWD/*/autocomplete/bat.zsh $HOME/.local/share/zinit/completions/_bat' \
+    atpull'%atclone'
+zinit light sharkdp/bat
+
+zinit ice wait"1" lucid from"gh-r" as"null" sbin"**/delta"
+zinit light dandavison/delta
+
+zinit ice wait"1" lucid from"gh-r" as"null" sbin"**/rg" \
+    atclone'ln -sf */complete/_rg _rg' atpull'%atclone' completions
+zinit light BurntSushi/ripgrep
+
+# eza — eza-community doesn't ship macOS binaries, download from cargo-quickinstall
+zinit ice wait"1" lucid as"null" \
+    id-as"eza" \
+    atclone'curl -fsSL https://github.com/cargo-bins/cargo-quickinstall/releases/download/eza-0.23.4/eza-0.23.4-aarch64-apple-darwin.tar.gz | tar xz' \
+    atpull'%atclone' \
+    sbin"eza"
+zinit load eza-community/eza
 
 # git extensions
-zinit ice wait"1" lucid as"null"
+zinit ice wait"1" lucid as"null" completions
 zinit light paulirish/git-open
 
 
@@ -185,7 +204,8 @@ zinit light imam_h/gitlab-roulette
 
 # zoxide (replaces z)
 zinit ice wait lucid from"gh-r" as"command" mv"zoxide* -> zoxide" \
-    atclone"./zoxide init zsh > init.zsh" atpull"%atclone" src"init.zsh" nocompile'!'
+    atclone"./zoxide init zsh > init.zsh" atpull"%atclone" src"init.zsh" nocompile'!' \
+    completions
 zinit light ajeetdsouza/zoxide
 
 # tab completion
@@ -340,8 +360,6 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-
 
 
 # >>> opentmux >>>

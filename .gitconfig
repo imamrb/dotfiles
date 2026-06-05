@@ -1,10 +1,20 @@
 [user]
-	email = ihossain@gitlab.com
+	email = imam.swe@gmail.com
 	name = Imam Hossain
-	signingkey = EDF2AF1480342316
 
 [commit]
 	gpgsign = true
+
+# Per-machine signing key (NOT tracked in dotfiles)
+[includeIf "gitdir:~/"]
+	path = .gitconfig-local
+
+# Work identity 
+## recommended to set:
+# [core] 
+#   fsmonitor = true
+[includeIf "gitdir:~/Work/"]
+	path = .gitconfig-work
 
 [filter "lfs"]
 	process = git-lfs filter-process
@@ -22,8 +32,7 @@
 	untrackedCache = true
 	commitGraph = true
 	multiPackIndex = true
-	fsmonitor = true
-	# fsmonitor = true
+	fsmonitor = false
 	# pager = delta --line-numbers
 
 [color]
@@ -59,10 +68,6 @@
 	algorithm = histogram
 [gpg]
 	pinentry-mode = loopback
-[maintenance]
-	repo = /Users/imho/Work/gdk/gitlab
-	repo = /Users/imho/Work/gdk
-	auto = true
 [gc]
 	writeCommitGraph = true
 [fetch]
