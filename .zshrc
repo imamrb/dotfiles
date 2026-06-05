@@ -208,6 +208,9 @@ zinit ice wait lucid from"gh-r" as"command" mv"zoxide* -> zoxide" \
     completions
 zinit light ajeetdsouza/zoxide
 
+# Clean stale completion symlinks
+find "$ZINIT_HOME/completions" -type l ! -exec test -e {} \; -delete 2>/dev/null
+
 # tab completion
 zinit wait lucid light-mode for \
                Aloxaf/fzf-tab
@@ -249,7 +252,7 @@ _zicompinit_custom() {
   local zcdc="$zcd.zwc"
   # Compile the completion dump to increase startup speed, if dump is newer or doesn't exist,
   # in the background as this is doesn't affect the current session
-  if [[ -f "$zcd"(#qN.m+1) ]]; then
+  if [[ ! -f "$zcd" ]] || [[ -f "$zcd"(#qN.m+1) ]]; then
         compinit -i -d "$zcd"
         { rm -f "$zcdc" && zcompile "$zcd" } &!
   else
