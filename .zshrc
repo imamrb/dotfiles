@@ -301,13 +301,13 @@ fi
 # zinit light zdharma-continuum/null
 
 
-# # mise
-# zinit wait"2" lucid from="gh-r" as="command" for \
-#     id-as="mise" mv="mise* -> mise" \
-#     atclone="./mise* completion zsh > _mise" \
-#     atpull="%atclone" \
-#     atload='eval "$(mise activate zsh --shims)"' \
-#     jdx/mise
+# mise (lazy: installed from gh-r, activated after prompt)
+zinit wait"2" lucid from="gh-r" as="command" for \
+    id-as="mise" mv="mise* -> mise" \
+    atclone="./mise* completion zsh > _mise" \
+    atpull="%atclone" \
+    atload='eval "$(mise activate zsh --shims)"' \
+    jdx/mise
 
 
 # ASDF
@@ -330,10 +330,6 @@ fi
 
 # eval "$(rbenv init -)"
 
-# eval "$(mise activate zsh --shims)"
-# eval "$(mise activate zsh)"
-
-
 ## these files can also be loaded using turbo mode
 ## Requires zinit update <file> command to run after updating the file
 
@@ -342,13 +338,6 @@ fi
 # zinit ice wait lucid
 # zinit snippet ~/.zsh_functions
 
-# eval "$(mise activate zsh --shims)"
-# eval "$(mise activate zsh)"
-
-# PATH="$HOME/.local/share/mise/shims:$PATH"
-# export PATH
-
-
 PATH="/usr/local/sbin:$PATH"
 PATH="$HOME/.bin:$PATH"
 PATH="$HOME/.local/share/bin:$PATH"
@@ -356,8 +345,6 @@ PATH="/opt/homebrew/opt/ruby/bin:$PATH"
 PATH="$HOME/.local/share/mise/shims:$PATH"
 PATH="$HOME/.local/bin:$PATH"
 export PATH
-
-eval "$(mise activate zsh)"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
