@@ -16,6 +16,28 @@ Setup scripts for mac: [/Documents/MacSetup](Documents/MacSetup)
    sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
 ```
 
+## Installing on a new machine
+- Clone the repository to ~/.dotfiles folder
+- Ignore the repo to avoid tracking itself
+- Define an alias named `dotfiles` which will work substitute `git` command
+- Don't show untracked files in `dotfiles status`
+- Backup the existing files to `.dotfiles-backup` folder and replace them with newer ones.
+- Checkout the actual content from your .dotfiles repository to $HOME
+
+```bash
+   git clone --bare git@github.com:imamrb/dotfiles.git $HOME/.dotfiles
+
+   alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+
+   # Backup existing files and checkout dotfiles
+   mkdir -p .dotfiles-backup && \
+   dotfiles checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | \
+   xargs -I{} mv {} .dotfiles-backup/{}
+   dotfiles checkout
+```
+
+For Details Explanation of these commands, checkout this blog [here](https://www.ackama.com/blog/posts/the-best-way-to-store-your-dotfiles-a-bare-git-repository-explained).
+
 ## Git Setup
 
 ### GPG key (signing commits)
@@ -61,30 +83,6 @@ These are picked up automatically by `includeIf` in the shared `.gitconfig`:
 | ---------------------------- | ------------------- | --------------------------------- |
 | `gitdir:~/`                  | `~/.gitconfig-local`  | Default signing key (per-machine) |
 | `gitdir:~/Work/`             | `~/.gitconfig-work`  | Work identity                     |
-
-## Installing on a new machine
-- Clone the repository to ~/.dotfiles folder
-- Ignore the repo to avoid tracking itself
-- Define an alias named `dotfiles` which will work substitute `git` command
-- Don't show untracked files in `dotfiles status`
-- Backup the existing files to `.dotfiles-backup` folder and replace them with newer ones.
-- Checkout the actual content from your .dotfiles repository to $HOME
-
-```bash
-   git clone --bare git@github.com:imamrb/dotfiles.git $HOME/.dotfiles
-
-   alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-
-   # Backup existing files and checkout dotfiles
-   mkdir -p .dotfiles-backup && \
-   dotfiles checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | \
-   xargs -I{} mv {} .dotfiles-backup/{}
-   dotfiles checkout
-```
-
-> Note: repo-specific settings (fsmonitor, excludes, showUntrackedFiles) are auto-applied via `includeIf` in `.gitconfig`.
-
-For Details Explanation of these commands, checkout this blog [here](https://www.ackama.com/blog/posts/the-best-way-to-store-your-dotfiles-a-bare-git-repository-explained).
 
 ## Thanks to
 
