@@ -8,8 +8,8 @@ Create Different Private and Public Key
 Create two different ssh key with work account and personal account email
 
 ```bash
-    ssh-keygen -t rsc -C "imam.hossain@welldev.io" -P '' -f 'id_rsa' # Work account
-	ssh-keygen -t rsa -C "imam.swe@gmail.com" -P '' -f 'id_rsa_personal'
+    ssh-keygen -t rsc -C "work@company.com" -P '' -f 'id_rsa' # Work account
+	ssh-keygen -t rsa -C "personal@example.com" -P '' -f 'id_rsa_personal'
 ```
 2 keys created at:
 
@@ -44,14 +44,14 @@ Modify the SSH config
 Then add
 
 ```bash
-	# Work account (imam.hossain@welldev.io), - the default config
+	# Work account (work@company.com), - the default config
 	Host github.com
 	   HostName ssh.github.com
 	   User git
 	   Port 443
 	   IdentityFile ~/.ssh/id_rsa
 	   
-	# Personal Account ( imam.swe@gmail.com)
+	# Personal Account (personal@example.com)
 	Host github.com-personal
 	   HostName ssh.github.com
 	   User git
@@ -75,10 +75,10 @@ Test
 ```bash
 
 ssh -T git@github.com
-# Response: Hi him-wtag! You've successfully authenticated, but GitHub does not provide shell access.
+# You've successfully authenticated, but GitHub does not provide shell access.
 
 ssh -T git@github.com-personal
-# Response: Hi Santho07! You've successfully authenticated, but GitHub does not provide shell access.
+# You've successfully authenticated, but GitHub does not provide shell access.
 
 ```
 
@@ -95,10 +95,10 @@ No need to manually `git config --local user.name` after each clone.
 ```bash
 # Work account — clone into ~/Work/ (identity from ~/.gitconfig-work)
 mkdir -p ~/Work
-git clone git@github.com:welldev/<repo_name> ~/Work/<repo_name>
+git clone git@github.com:company/<repo_name> ~/Work/<repo_name>
 
 # Personal account — clone anywhere else (identity from ~/.gitconfig-local)
-git clone git@github.com-personal:Santho07/<repo_name>
+git clone git@github.com-personal:username/<repo_name>
 ```
 
 See `.gitconfig` for the `includeIf` rules.
