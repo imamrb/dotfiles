@@ -85,36 +85,23 @@ ssh -T git@github.com-personal
 Clone Repo and Modify Git config
 --------------------------------------------
 
-Clone with work account
+Identity is handled automatically by `includeIf` in `.gitconfig`:
+
+- **Work repos** cloned under `~/Work/` → auto-loads `~/.gitconfig-work` (work name/email/signingkey)
+- **Personal repos** anywhere else → auto-loads `~/.gitconfig-local` (personal signingkey)
+
+No need to manually `git config --local user.name` after each clone.
 
 ```bash
-	git clone git@github.com-personal:Santho07/<repo_name>
-	
-	# cd <repo_name> and modify git config
-	
-	git config --local user.name 'Imam Hossain'
-	git config --local user.email 'imam.hossain@welldev.io'
- 
+# Work account — clone into ~/Work/ (identity from ~/.gitconfig-work)
+mkdir -p ~/Work
+git clone git@github.com:welldev/<repo_name> ~/Work/<repo_name>
+
+# Personal account — clone anywhere else (identity from ~/.gitconfig-local)
+git clone git@github.com-personal:Santho07/<repo_name>
 ```
 
-Clone with personal account
-
-```bash
-	git clone git@github.com-personal:Santho07/<repo_name>
-	
-	# cd <repo_name> and modify git config
-	
-	git config --local user.name 'Imam Hossain'
-	git config --local user.email 'imam.swe@gmail.com'
- 
-```
-
-Or, set global git config
-
-```bash
-	$ git config --global user.name "Imam Hossain"
-	$ git config --global user.email "imam.hossain@welldev.io"
-```
+See `.gitconfig` for the `includeIf` rules.
 
 Then use normal flow to push code
 
