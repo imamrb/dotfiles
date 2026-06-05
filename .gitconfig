@@ -9,12 +9,16 @@
 [includeIf "gitdir:~/"]
 	path = .gitconfig-local
 
-# Work identity 
+# Work identity
 ## recommended to set:
-# [core] 
+# [core]
 #   fsmonitor = true
 [includeIf "gitdir:~/Work/"]
 	path = .gitconfig-work
+
+# Dotfiles bare repo settings (fsmonitor off, untracked excludes)
+[includeIf "gitdir:~/.dotfiles/"]
+	path = ~/.dotfiles_repo_config
 
 [filter "lfs"]
 	process = git-lfs filter-process
