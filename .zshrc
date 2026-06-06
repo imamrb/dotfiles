@@ -302,9 +302,11 @@ fi
 
 
 # mise (lazy: installed from gh-r, activated after prompt)
-zinit wait"2" lucid from="gh-r" as="command" for \
-    id-as="mise" mv="mise* -> mise" \
-    atclone="./mise* completion zsh > _mise" \
+# Note: mise ships both a raw binary and .tar.gz; bpick selects the archive
+zinit wait"2" lucid from="gh-r" as="null" for \
+    id-as="mise" sbin="**/mise" \
+    bpick="*macos-arm64.tar.gz" \
+    atclone='./mise/bin/mise completion zsh > _mise; chmod +x mise/bin/mise' \
     atpull="%atclone" \
     atload='eval "$(mise activate zsh --shims)"' \
     jdx/mise
