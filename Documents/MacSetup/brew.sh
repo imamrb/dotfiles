@@ -39,10 +39,10 @@ brew install nvim
 
 ## Tools
 brew install htop
-brew install eza
+# brew install eza         # managed via zinit (from gh-r)
 brew install raycast
 brew install --cask monitorcontrol
-brew install isacikgoz/taps/tldr
+# brew install isacikgoz/taps/tldr  # replaced by tealdeer via zinit
 
 # Apps
 # brew install google-chrome
