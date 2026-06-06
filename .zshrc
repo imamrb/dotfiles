@@ -116,16 +116,6 @@ zinit for depth=1 romkatv/powerlevel10k
 # Begin zinits Plugins
 # - - - - - - - - - - - - - - - - - - - -
 
-# OMZ Plugins Load first
-zinit wait lucid for \
-        atload"unalias rs" OMZP::rails \
-            OMZP::colored-man-pages \
-            OMZP::extract \
-            OMZP::jsontools\
-            # OMZP::docker-compose \
-        # as"completion" \
-        #     OMZP::docker/_docker
-
 # Some utilities
 zinit wait"1" lucid light-mode for \
                djui/alias-tips \
@@ -147,14 +137,6 @@ zinit wait"1" lucid from"gh-r" as"null" for \
     sbin"**/rg" \
     atclone'ln -sf */complete/_rg _rg' atpull'%atclone' completions \
     BurntSushi/ripgrep
-
-# eza — eza-community doesn't ship macOS binaries, download from cargo-quickinstall
-zinit wait"1" lucid as"null" for \
-    id-as"eza" \
-    atclone'curl -fsSL https://github.com/cargo-bins/cargo-quickinstall/releases/download/eza-0.23.4/eza-0.23.4-aarch64-apple-darwin.tar.gz | tar xz' \
-    atpull'%atclone' \
-    sbin"eza" \
-    eza-community/eza
 
 # git extensions
 zinit wait"1" lucid as"null" for \
@@ -178,6 +160,9 @@ zinit wait"1" lucid as"program" from"gitlab.com" for \
 #                  supercrabtree/k \
 #                  micha/resty
 
+zinit ice from"gh-r" as"program" mv"eza* -> eza" pick"eza"
+zinit light eza-community/eza
+
 # zoxide (replaces z)
 zinit wait lucid from"gh-r" as"command" for \
     mv"zoxide* -> zoxide" \
@@ -195,20 +180,15 @@ zinit wait"1" lucid from="gh-r" as="null" for \
     completions \
     tealdeer-rs/tealdeer
 
-# Clean stale completion symlinks
-find "$ZINIT_HOME/completions" -type l ! -exec test -e {} \; -delete 2>/dev/null
-
 # tab completion
-zinit wait lucid light-mode for \
-               Aloxaf/fzf-tab
+zinit wait lucid for Aloxaf/fzf-tab
 
 ZVM_INIT_MODE=sourcing
 ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT  # start in insert mode (normal shell behavior)
 ZVM_VI_INSERT_ESCAPE_BINDKEY=jk      # jk to escape to normal mode
 
-zinit for \
-    depth=1 \
-    jeffreytse/zsh-vi-mode
+# vim-like editor for input in terminal
+zinit for depth=1 jeffreytse/zsh-vi-mode
 
 # Don't bind these keys until ready
 bindkey -r '^[[A' # Arrow Up, `cat -v` for checking
@@ -230,11 +210,12 @@ zinit wait lucid for \
     zsh-users/zsh-autosuggestions
 
 # Binds Ctrl-R to a widget that searches for multiple keywords
-zinit wait lucid for \
-    zdharma-continuum/history-search-multi-word
+zinit wait lucid for zdharma-continuum/history-search-multi-word
 
+# zinit pack for ls_colors
 
-compdef '_files -W "/System/Volumes/Data/Applications/*"' opena
+# Clean stale completion symlinks
+find "$ZINIT_HOME/completions" -type l -xtype l -delete 2>/dev/null
 
 # compinit Imporoved
 # checking the cached .zcompdump file to see if it must be regenerated once a day.
@@ -254,21 +235,23 @@ _zicompinit_custom() {
   fi
 }
 
-# Syntax highlighting, place at end
-zinit wait lucid for \
-    atinit'_zicompinit_custom; zicdreplay;' \
-    zdharma-continuum/fast-syntax-highlighting
-
 # Tab completions
 zinit wait lucid for \
     blockf atpull'zinit creinstall -q .' \
     zsh-users/zsh-completions
 
+# Syntax highlighting, place at end
+zinit wait lucid for \
+    atinit'_zicompinit_custom; zicdreplay;' \
+    zdharma-continuum/fast-syntax-highlighting
+
+# eza 
+alias ls='eza --icons --group-directories-first'
 
 # bat
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export MANROFFOPT="-c"
-alias cat="bat --paging=never"
+alias cat="bat -pp"
 
 # fzf — use fd + bat preview
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
@@ -280,14 +263,28 @@ function zvm_after_init() {
   bindkey '^F' fzf-file-widget 2>/dev/null || true
 }
 
-# Source aliases and functions
-source ~/.aliases
+# sources ~/.aliases lazily
+zinit ice wait lucid
+zinit snippet "${HOME}/.aliases"
+
+# OMZ Plugins https://github.com/ohmyzsh/ohmyzsh/wiki/plugins#plugins
+zinit wait lucid for \
+        atload"unalias rs" OMZP::rails \
+            OMZP::colored-man-pages \
+            OMZP::extract \
+            OMZP::jsontools\
+            OMZP::eza
+
+# aliases — ohmyzsh aliases plugin + cheatsheet.py via dl ice
+zinit ice wait lucid \
+    dl"https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/aliases/cheatsheet.py -> cheatsheet.py" \
+    atpull'%atclone'
+zinit snippet OMZP::aliases
 
 # Load private environment variables if file exists
 if [[ -f "$HOME/.zshenv_private" ]]; then
   source $HOME/.zshenv_private
 fi
-
 
 # mise (lazy: installed from gh-r, activated after prompt)
 # Note: mise ships both a raw binary and .tar.gz; bpick selects the archive
@@ -299,9 +296,6 @@ zinit wait"2" lucid from="gh-r" as="null" for \
     atload='eval "$(mise activate zsh --shims)"' \
     jdx/mise
 
-# # direnv
-# eval "$(direnv hook zsh)"
-
 PATH="/usr/local/sbin:$PATH"
 PATH="$HOME/.bin:$PATH"
 PATH="$HOME/.local/share/bin:$PATH"
@@ -310,10 +304,14 @@ PATH="$HOME/.local/share/mise/shims:$PATH"
 PATH="$HOME/.local/bin:$PATH"
 export PATH
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+if [[ -f "${HOME}/.iterm2_shell_integration.zsh" ]]; then
+  zinit ice wait lucid
+  zinit snippet "${HOME}/.iterm2_shell_integration.zsh"
+fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
 
 # >>> opentmux >>>
 export OPENCODE_PORT=4096

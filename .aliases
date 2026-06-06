@@ -12,7 +12,6 @@ shelltime() {
 alias reload="exec ${SHELL} -l"
 
 alias nano="nvim"
-# alias cat="bat -pp"
 
 # CD
 alias ..="cd .."
@@ -80,9 +79,6 @@ function tcp() {
 }
 
 # GNU
-
-alias ls='eza --icons --group-directories-first'
-alias cat='bat'
 alias preview="fzf --preview 'bat --color \"always\" {}'"
 alias up='sudo apt update -y && sudo apt upgrade -y'
 
