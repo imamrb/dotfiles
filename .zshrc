@@ -213,8 +213,9 @@ zinit wait"1" lucid from="gh-r" as="null" for \
     id-as="tealdeer" \
     mv="tealdeer-macos-aarch64 -> tldr" sbin="tldr" \
     bpick="*macos-aarch64" \
-    atclone="./tldr --version" \
+    atclone="ln -sf */completions/_tldr _tldr" \
     atpull="%atclone" \
+    completions \
     tealdeer-rs/tealdeer
 
 # Clean stale completion symlinks
