@@ -213,7 +213,7 @@ zinit wait"1" lucid from="gh-r" as="null" for \
     id-as="tealdeer" \
     mv="tealdeer-macos-aarch64 -> tldr" sbin="tldr" \
     bpick="*macos-aarch64" \
-    atclone="ln -sf */completions/_tldr _tldr" \
+    atclone="curl -fsSLo _tldr https://raw.githubusercontent.com/tealdeer-rs/tealdeer/main/completion/zsh_tealdeer" \
     atpull="%atclone" \
     completions \
     tealdeer-rs/tealdeer
