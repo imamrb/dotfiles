@@ -26,7 +26,6 @@ UPDATE_ZSH_DAYS=15                     # Auto-update oh-my-zsh (in days).
 # # This makes repository status check for large repositories much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true" # Disable marking untracked files under VCS as dirty.
 
-
 # History environment variables
 HISTFILE=${HOME}/.zsh_history
 export HISTSIZE=10000000               # Maximum number of history entries to keep alive in one session
@@ -110,15 +109,8 @@ setopt promptsubst
 ## needs: oh-my-zsh
 zinit for depth=1 romkatv/powerlevel10k
 
-# zinit ice pick"async.zsh" src"pure.zsh"
-# zinit light sindresorhus/pure
-
-# zinit light spaceship-prompt/spaceship-prompt
-
 # zinit ice svn
 # zinit snippet OMZ::plugins/tmux
-
-# compdef '_files -W "/System/Volumes/Data/Applications/*"' opena
 
 # - - - - - - - - - - - - - - - - - - - -
 # Begin zinits Plugins
@@ -140,10 +132,6 @@ zinit wait"1" lucid light-mode for \
     	       b4b4r07/emoji-cli
                # imamrb/jira.plugin.zsh
 
-# delta git pager
-# zinit ice wait lucid as"command" from"gh-r" mv"delta* -> delta" pick"delta/delta"
-# zinit light dandavison/delta
-
 # After automatic unpacking it provides program from github releases
 # Each tool gets its own atclone to hoist nested completion files
 zinit wait"1" lucid from"gh-r" as"null" for \
@@ -153,11 +141,9 @@ zinit wait"1" lucid from"gh-r" as"null" for \
     atclone'ln -sf */autocomplete/_fd _fd' atpull'%atclone' completions \
     sharkdp/fd \
     sbin"**/bat" \
-    atclone'ln -sf $PWD/*/autocomplete/bat.zsh $HOME/.local/share/zinit/completions/_bat' \
-    atpull'%atclone' \
+    atclone'ln -sf */autocomplete/bat.zsh _bat' atpull'%atclone' completions \
     sharkdp/bat \
-    sbin"**/delta" \
-    dandavison/delta \
+    sbin"**/delta" dandavison/delta \
     sbin"**/rg" \
     atclone'ln -sf */complete/_rg _rg' atpull'%atclone' completions \
     BurntSushi/ripgrep
@@ -192,12 +178,6 @@ zinit wait"1" lucid as"program" from"gitlab.com" for \
 #                  supercrabtree/k \
 #                  micha/resty
 
-# zinit ice wait node"tldr"
-# zinit light zdharma-continuum/null
-
-# zinit ice wait lucid gem'!pry'
-# zinit light zdharma-continuum/null
-
 # zoxide (replaces z)
 zinit wait lucid from"gh-r" as"command" for \
     mv"zoxide* -> zoxide" \
@@ -225,6 +205,7 @@ zinit wait lucid light-mode for \
 ZVM_INIT_MODE=sourcing
 ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT  # start in insert mode (normal shell behavior)
 ZVM_VI_INSERT_ESCAPE_BINDKEY=jk      # jk to escape to normal mode
+
 zinit for \
     depth=1 \
     jeffreytse/zsh-vi-mode
@@ -253,6 +234,8 @@ zinit wait lucid for \
     zdharma-continuum/history-search-multi-word
 
 
+compdef '_files -W "/System/Volumes/Data/Applications/*"' opena
+
 # compinit Imporoved
 # checking the cached .zcompdump file to see if it must be regenerated once a day.
 _zicompinit_custom() {
@@ -260,21 +243,18 @@ _zicompinit_custom() {
   autoload -Uz compinit
   local zcd=${ZDOTDIR:-$HOME}/.zcompdump
   local zcdc="$zcd.zwc"
-  # Compile the completion dump to increase startup speed, if dump is newer or doesn't exist,
-  # in the background as this is doesn't affect the current session
-  if [[ ! -f "$zcd" ]] || [[ -f "$zcd"(#qN.m+1) ]]; then
-        compinit -i -d "$zcd"
-        { rm -f "$zcdc" && zcompile "$zcd" } &!
+  # Always use cached compinit — no daily regen penalty. zinit handles completion
+  # registration via creinstall/completions ice, so dump stays current.
+  if [[ ! -f "$zcd" ]]; then
+    compinit -i -d "$zcd"
+    { rm -f "$zcdc" && zcompile "$zcd" } &!
   else
-        compinit -C -d "$zcd"
-        { [[ ! -f "$zcdc" || "$zcd" -nt "$zcdc" ]] && rm -f "$zcdc" && zcompile "$zcd" } &!
+    compinit -C -d "$zcd"
+    { [[ ! -f "$zcdc" || "$zcd" -nt "$zcdc" ]] && rm -f "$zcdc" && zcompile "$zcd" } &!
   fi
 }
 
 # Syntax highlighting, place at end
-# use this line for profiling
-# zinit ice wait lucid atinit'zmodload zsh/zprof; zicompinit; zicdreplay' \
-#                                                atload'zprof | head -n 20; zmodload -u zsh/zprof'
 zinit wait lucid for \
     atinit'_zicompinit_custom; zicdreplay;' \
     zdharma-continuum/fast-syntax-highlighting
@@ -309,10 +289,6 @@ if [[ -f "$HOME/.zshenv_private" ]]; then
 fi
 
 
-# zinit ice wait lucid gem'!pry'
-# zinit light zdharma-continuum/null
-
-
 # mise (lazy: installed from gh-r, activated after prompt)
 # Note: mise ships both a raw binary and .tar.gz; bpick selects the archive
 zinit wait"2" lucid from="gh-r" as="null" for \
@@ -323,34 +299,8 @@ zinit wait"2" lucid from="gh-r" as="null" for \
     atload='eval "$(mise activate zsh --shims)"' \
     jdx/mise
 
-
-# ASDF
-
-# zinit ice wait lucid fsrc"asdf.sh -> asdf"
-# zinit light asdf-vm/asdf
-
-# # NVM
-# zinit ice wait lucid
-# zinit light lukechilds/zsh-nvm
-
-# rbenv
-# zinit ice wait lucid
-# zinit light htlsne/zinit-rbenv
-# or
-# eval "$(rbenv init - --no-rehash)"
-
 # # direnv
 # eval "$(direnv hook zsh)"
-
-# eval "$(rbenv init -)"
-
-## these files can also be loaded using turbo mode
-## Requires zinit update <file> command to run after updating the file
-
-# zinit ice wait lucid
-# zinit snippet ~/.zsh_aliases
-# zinit ice wait lucid
-# zinit snippet ~/.zsh_functions
 
 PATH="/usr/local/sbin:$PATH"
 PATH="$HOME/.bin:$PATH"
@@ -364,7 +314,6 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
 
 # >>> opentmux >>>
 export OPENCODE_PORT=4096
