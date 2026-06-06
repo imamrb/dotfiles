@@ -12,16 +12,16 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 # Install if we don't have it
 if test ! $(which brew); then
   echo "Installing homebrew..."
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install)"
 fi
 
 brew update                # Make sure we’re using the latest Homebrew.
-brew upgrade --all         # Upgrade any already-installed formulae.
+brew upgrade               # Upgrade any already-installed formulae.
 
 # Install GNU core utilities (those that come with OS X are outdated).
 # Don’t forget to add `$(brew --prefix coreutils)/libexec/gnubin` to `$PATH`.
 brew install coreutils
-sudo ln -s /usr/local/bin/gsha256sum /usr/local/bin/sha256sum
+# sudo ln -s "$(brew --prefix coreutils)/bin/gsha256sum" "$(brew --prefix coreutils)/bin/sha256sum"
 
 brew install moreutils     # Install some other useful utilities like `sponge`.
 brew install findutils     # Install GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed.
@@ -30,7 +30,7 @@ brew install wget          # Install `wget` with IRI support.
 
 # Install more recent versions of some OS X tools.
 brew install vim
-brew install nvim
+brew install neovim
 # brew install git
 # brew install git-lfs
 # brew install git-flow
@@ -40,7 +40,7 @@ brew install nvim
 ## Tools
 brew install htop
 # brew install eza         # managed via zinit (from gh-r)
-brew install raycast
+brew install --cask raycast
 brew install --cask monitorcontrol
 # brew install isacikgoz/taps/tldr  # replaced by tealdeer via zinit
 
@@ -52,8 +52,8 @@ brew install --cask monitorcontrol
 # brew install runjs        # JavaScript emulator
 
 # Development tools
-brew install visual-studio-code
-brew install sublime-text
+brew install --cask visual-studio-code
+brew install --cask sublime-text
 # brew install recordit
 # brew install iterm2
 # brew install yarn
