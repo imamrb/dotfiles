@@ -108,7 +108,7 @@ zinit light-mode for \
 setopt promptsubst
 
 ## needs: oh-my-zsh
-zinit ice depth=1; zinit light romkatv/powerlevel10k
+zinit for depth=1 romkatv/powerlevel10k
 
 # zinit ice pick"async.zsh" src"pure.zsh"
 # zinit light sindresorhus/pure
@@ -146,47 +146,45 @@ zinit wait"1" lucid light-mode for \
 
 # After automatic unpacking it provides program from github releases
 # Each tool gets its own atclone to hoist nested completion files
-zinit ice wait"1" lucid from"gh-r" as"null" sbin"fzf"
-zinit light junegunn/fzf
-
-zinit ice wait"1" lucid from"gh-r" as"null" sbin"**/fd" \
-    atclone'ln -sf */autocomplete/_fd _fd' atpull'%atclone' completions
-zinit light sharkdp/fd
-
-zinit ice wait"1" lucid from"gh-r" as"null" sbin"**/bat" \
+zinit wait"1" lucid from"gh-r" as"null" for \
+    sbin"fzf" \
+    junegunn/fzf \
+    sbin"**/fd" \
+    atclone'ln -sf */autocomplete/_fd _fd' atpull'%atclone' completions \
+    sharkdp/fd \
+    sbin"**/bat" \
     atclone'ln -sf $PWD/*/autocomplete/bat.zsh $HOME/.local/share/zinit/completions/_bat' \
-    atpull'%atclone'
-zinit light sharkdp/bat
-
-zinit ice wait"1" lucid from"gh-r" as"null" sbin"**/delta"
-zinit light dandavison/delta
-
-zinit ice wait"1" lucid from"gh-r" as"null" sbin"**/rg" \
-    atclone'ln -sf */complete/_rg _rg' atpull'%atclone' completions
-zinit light BurntSushi/ripgrep
+    atpull'%atclone' \
+    sharkdp/bat \
+    sbin"**/delta" \
+    dandavison/delta \
+    sbin"**/rg" \
+    atclone'ln -sf */complete/_rg _rg' atpull'%atclone' completions \
+    BurntSushi/ripgrep
 
 # eza — eza-community doesn't ship macOS binaries, download from cargo-quickinstall
-zinit ice wait"1" lucid as"null" \
+zinit wait"1" lucid as"null" for \
     id-as"eza" \
     atclone'curl -fsSL https://github.com/cargo-bins/cargo-quickinstall/releases/download/eza-0.23.4/eza-0.23.4-aarch64-apple-darwin.tar.gz | tar xz' \
     atpull'%atclone' \
-    sbin"eza"
-zinit load eza-community/eza
+    sbin"eza" \
+    eza-community/eza
 
 # git extensions
-zinit ice wait"1" lucid as"null" completions
-zinit light paulirish/git-open
-
+zinit wait"1" lucid as"null" for \
+    completions \
+    paulirish/git-open
 
 # diff so fancy
-zinit ice wait lucid sbin"bin/git-dsf"
-zinit light zdharma-continuum/zsh-diff-so-fancy
+zinit wait lucid for \
+    sbin"bin/git-dsf" \
+    zdharma-continuum/zsh-diff-so-fancy
 
-zinit ice wait"1" lucid as"program" from"gitlab.com" \
-      mv"roulette.sh -> roulette" pick"roulette" \
-      atpull'!git reset --hard' \
-      atclone"./configure.sh"
-zinit light imam_h/gitlab-roulette
+zinit wait"1" lucid as"program" from"gitlab.com" for \
+    mv"roulette.sh -> roulette" pick"roulette" \
+    atpull'!git reset --hard' \
+    atclone"./configure.sh" \
+    imam_h/gitlab-roulette
 
 ## ajaira
 # zinit wait lucid light-mode for \
@@ -200,13 +198,12 @@ zinit light imam_h/gitlab-roulette
 # zinit ice wait lucid gem'!pry'
 # zinit light zdharma-continuum/null
 
-## needs: zinit, fzf
-
 # zoxide (replaces z)
-zinit ice wait lucid from"gh-r" as"command" mv"zoxide* -> zoxide" \
+zinit wait lucid from"gh-r" as"command" for \
+    mv"zoxide* -> zoxide" \
     atclone"./zoxide init zsh > init.zsh" atpull"%atclone" src"init.zsh" nocompile'!' \
-    completions
-zinit light ajeetdsouza/zoxide
+    completions \
+    ajeetdsouza/zoxide
 
 # tealdeer — fast tldr client (raw binary, no archive)
 zinit wait"1" lucid from="gh-r" as="null" for \
@@ -228,8 +225,9 @@ zinit wait lucid light-mode for \
 ZVM_INIT_MODE=sourcing
 ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT  # start in insert mode (normal shell behavior)
 ZVM_VI_INSERT_ESCAPE_BINDKEY=jk      # jk to escape to normal mode
-zinit ice depth=1
-zinit light jeffreytse/zsh-vi-mode
+zinit for \
+    depth=1 \
+    jeffreytse/zsh-vi-mode
 
 # Don't bind these keys until ready
 bindkey -r '^[[A' # Arrow Up, `cat -v` for checking
@@ -240,17 +238,19 @@ function __bind_history_keys() {
 }
 
 # History substring searching
-zinit ice wait lucid atload'__bind_history_keys'
-zinit light zsh-users/zsh-history-substring-search
+zinit wait lucid for \
+    atload'__bind_history_keys' \
+    zsh-users/zsh-history-substring-search
 
 # Autosuggestions, trigger precmd hook upon load
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=10
-zinit ice wait lucid atload'_zsh_autosuggest_start'
-zinit light zsh-users/zsh-autosuggestions
+zinit wait lucid for \
+    atload'_zsh_autosuggest_start' \
+    zsh-users/zsh-autosuggestions
 
 # Binds Ctrl-R to a widget that searches for multiple keywords
-zinit ice wait lucid
-zinit load zdharma-continuum/history-search-multi-word
+zinit wait lucid for \
+    zdharma-continuum/history-search-multi-word
 
 
 # compinit Imporoved
@@ -275,12 +275,14 @@ _zicompinit_custom() {
 # use this line for profiling
 # zinit ice wait lucid atinit'zmodload zsh/zprof; zicompinit; zicdreplay' \
 #                                                atload'zprof | head -n 20; zmodload -u zsh/zprof'
-zinit ice wait lucid atinit'_zicompinit_custom; zicdreplay;'
-zinit light zdharma-continuum/fast-syntax-highlighting
+zinit wait lucid for \
+    atinit'_zicompinit_custom; zicdreplay;' \
+    zdharma-continuum/fast-syntax-highlighting
 
 # Tab completions
-zinit ice wait lucid blockf atpull'zinit creinstall -q .'
-zinit light zsh-users/zsh-completions
+zinit wait lucid for \
+    blockf atpull'zinit creinstall -q .' \
+    zsh-users/zsh-completions
 
 
 # bat
