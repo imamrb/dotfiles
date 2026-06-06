@@ -208,6 +208,15 @@ zinit ice wait lucid from"gh-r" as"command" mv"zoxide* -> zoxide" \
     completions
 zinit light ajeetdsouza/zoxide
 
+# tealdeer — fast tldr client (raw binary, no archive)
+zinit wait"1" lucid from="gh-r" as="null" for \
+    id-as="tealdeer" \
+    mv="tealdeer-macos-aarch64 -> tldr" sbin="tldr" \
+    bpick="*macos-aarch64" \
+    atclone="./tldr --version" \
+    atpull="%atclone"
+zinit light tealdeer-rs/tealdeer
+
 # Clean stale completion symlinks
 find "$ZINIT_HOME/completions" -type l ! -exec test -e {} \; -delete 2>/dev/null
 
