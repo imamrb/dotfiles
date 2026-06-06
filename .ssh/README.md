@@ -8,20 +8,20 @@ Create Different Private and Public Key
 Create two different ssh key with work account and personal account email
 
 ```bash
-    ssh-keygen -t rsc -C "work@company.com" -P '' -f 'id_rsa' # Work account
+    ssh-keygen -t rsc -C "work@company.com" -P '' -f 'id_rsa_work' # Work account
 	ssh-keygen -t rsa -C "personal@example.com" -P '' -f 'id_rsa_personal'
 ```
 2 keys created at:
 
 ```bash
-	~/.ssh/id_rsa
+	~/.ssh/id_rsa_work
 	~/.ssh/id_rsa_personal
 ```
 Then add keys ( Optional )
 
 ```bash
 	ssh-add -D # Delete all cached keys first
-	ssh-add ~/.ssh/id_rsa
+	ssh-add ~/.ssh/id_rsa_work
 	ssh-add ~/.ssh/id_rsa_personal
 
 ```
@@ -49,7 +49,7 @@ Then add
 	   HostName ssh.github.com
 	   User git
 	   Port 443
-	   IdentityFile ~/.ssh/id_rsa
+	   IdentityFile ~/.ssh/id_rsa_work
 	   
 	# Personal Account (personal@example.com)
 	Host github.com-personal
