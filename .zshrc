@@ -214,7 +214,8 @@ zinit wait"1" lucid from="gh-r" as="null" for \
     mv="tealdeer-macos-aarch64 -> tldr" sbin="tldr" \
     bpick="*macos-aarch64" \
     atclone="./tldr --version" \
-    atpull="%atclone"
+    atpull="%atclone" \
+    tealdeer-rs/tealdeer
 
 # Clean stale completion symlinks
 find "$ZINIT_HOME/completions" -type l ! -exec test -e {} \; -delete 2>/dev/null
