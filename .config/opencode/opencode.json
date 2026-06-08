@@ -16,7 +16,6 @@
     "@tarquinen/opencode-dcp@latest",
     "oh-my-opencode@3.14",
     "opentmux",
-    "/Users/imho/.local/share/opencode-memory-install/plugin",
     "opencode-agent-tmux"
   ],
   "default_agent": "sisyphus",
@@ -46,9 +45,20 @@
     }
   },
   "mcp": {
-    "memory": {
-      "type": "remote",
-      "url": "http://localhost:9824/mcp"
+    "basic-memory": {
+      "type": "local",
+      "command": [
+        "basic-memory",
+        "mcp"
+      ],
+      "enabled": true
+    },
+    "playwright": {
+      "type": "local",
+      "command": [
+        "npx",
+        "@playwright/mcp@latest"
+      ]
     }
   }
 }

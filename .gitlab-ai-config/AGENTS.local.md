@@ -165,5 +165,6 @@ rtk git log --oneline -10
 rtk git branch -a
 ```
 
-- `--format progress` over `--format documentation` for spec runs
+- `--format progress` over `--format documentation` for spec runs — failure details are still printed in full at the end, and passing-test names are noise
+- Redirect spec output to `tmp/rspec-*.log` and `grep` the failure section instead of scrolling tool output or rerunning the spec
 - `--name-only` when only file list is needed

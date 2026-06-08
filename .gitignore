@@ -19,8 +19,5 @@
 
 # Misc
 gkg-http-server
-
-# Auto-generated / should not be tracked
 .yarnrc
-.config/cmux/cmux.json
-
+**/.claude/settings.local.json

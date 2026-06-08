@@ -12,13 +12,15 @@ metadata:
 
 Generic RSpec patterns and GitLab-specific conventions for writing, running, and debugging specs in the GitLab monorepo:
 
-- Optimize running specs with `rspec-diff` and `--format progress` to minimize feedback loop
+- Optimize multiple specs in ONE command with line numbers and `--format progress` to minimize feedback loop
 - Finalize implementation before writing specs — avoid spec churn from changing requirements
 - Use table-driven specs (`where`/`with_them`) for 3+ cases with identical structure
 - Use shared examples for repeated expectation bodies across contexts
 - Avoid writing unnecessary specs, eg: when covered by previous examples, no need to test negative cases again
 - Feature flags are enabled by default in specs — stub them to test disabled behavior
 - Make sure the rubocop suite is clean before marking work done
+- Prefer testing with actual objects over mock/stub
+- Always run specs with `--format progress`, redirect output to `tmp/rspec-<name>.log`, and `grep` the failure section — full failure details are printed at the end, so rerunning to recapture them is wasted work
 
 ## Running Specs
 
@@ -42,12 +44,19 @@ rtk bundle exec rspec spec/path/to_spec.rb:15
 |-----------|---------|
 | Working on a feature | `zsh -i -c "rspec-diff \| xargs -r bin/rspec"` |
 | Specific file/line changed | `bin/rspec file_spec.rb:LINE` |
-| Multiple files changed | `bin/rspec spec1.rb spec2.rb --format progress` |
+| Multiple files changed | `bin/rspec spec1.rb spec2.rb --format documentation` |
 | `bin/rspec` fails with Ci::* module not found | `bundle exec rspec ...` |
 
 **Pre-existing failures**: note them and move on — do NOT fix unrelated failures unless asked.
 
-Always use `--format progress` (dots) over `--format documentation` for large suites — far less output, faster to scan.
+**Output handling**: default to `--format progress` with output redirected to a temp file, then `grep` the file for failures. Progress mode still prints the full failure block (message, expected/actual, backtrace) at the end of the run, so you don't lose detail — you just skip the passing-test names that an LLM doesn't need.
+
+```bash
+rtk bin/rspec spec/path/to_spec.rb --format progress > tmp/rspec-output.log 2>&1
+rg -nP 'Failure|FAILED|Error:|Failed examples:' tmp/rspec-output.log
+```
+
+Reach for `--format documentation` only when you specifically need the human-readable example names (e.g., to map a failure back to its `describe`/`context` nesting).
 
 ---
 
